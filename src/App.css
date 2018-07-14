@@ -1,0 +1,19 @@
+.App {
+  position: absolute;
+  top: 0;
+
+  background-color: #22a;
+  color: #fff;
+  width: 100%;
+}
+
+#locations {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+
+}
+
+table tr td {
+  vertical-align: top;
+}

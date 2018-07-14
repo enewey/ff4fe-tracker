@@ -1,0 +1,34 @@
+.Location {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+
+    width: 100%;
+    height: 32px;
+
+    margin: 2px;
+
+    opacity: 0.6;
+}
+
+.Location:hover {
+    background-color: #33b;
+}
+
+.selected {
+    border: 2px;
+    border-color: #ff0;
+}
+
+.available {
+    opacity: 1.0;
+}
+
+.Location.divider {
+    display: inline-block;
+    width: 1px;
+    height: 100%;
+    color: #fff;
+    padding: 4px;
+    margin: 0 4px;
+}

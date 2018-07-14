@@ -1,0 +1,18 @@
+.Key {
+  display: inline-flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: left;
+
+  height: 32px;
+
+  opacity: 0.6;
+}
+
+.Key:hover {
+  opacity: 1.0;
+}
+
+.active {
+  opacity: 1.0;
+}
