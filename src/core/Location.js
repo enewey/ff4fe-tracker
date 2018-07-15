@@ -3,13 +3,15 @@ import PropTypes from 'prop-types'
 import Key from './Key'
 import './Location.css'
 
-const Location = ({id, keys, graphic, onSelect, onKeySelect, available, active}) => (
-    <div id={id} className={`Location ${(active ? 'selected' : false)} ${(available ? 'available' : false)}`} onClick={onSelect} >
+const Location = ({id, keys, graphic, onSelect, onKeySelect, available, active}) => {
+    
+    return(
+    <div id={id} className={`Location${(active ? ' selected' : '')}${(available ? ' available' : '')}`} onClick={onSelect} >
         <img src={graphic.uri} width={graphic.width} height={graphic.height} alt={graphic.alt} />
         <div className='divider' />
         { keys.map((v,i) => <Key key={`${v.id}-${i}`} type={v.type} id={v.id} graphic={v.graphic} onSelect={onKeySelect}/>) }
     </div>
-)
+)}
 
 Location.propTypes = {
     id: PropTypes.string.isRequired,

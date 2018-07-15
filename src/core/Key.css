@@ -5,6 +5,7 @@
   justify-content: left;
 
   height: 32px;
+  margin: 0 2px;
 
   opacity: 0.6;
 }
@@ -13,6 +14,10 @@
   opacity: 1.0;
 }
 
-.active {
+.available {
   opacity: 1.0;
+}
+
+.used {
+  opacity: 0.3;
 }

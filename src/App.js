@@ -8,7 +8,7 @@ const extractProps = (value, set) => {
   let ret = []
   for (let prop in set) {
     if (set.hasOwnProperty(prop)) {
-      if (set.prop === value) {
+      if (set[prop] === value) {
         ret.push(prop)
       }
     }
@@ -17,7 +17,6 @@ const extractProps = (value, set) => {
 }
 
 const checkConditions = (conditions, keyState, bossState) => {
-  console.log('checkConditions', conditions)
   let test = true;
   for (let i = 0; i < conditions.length; i++) {
     const cond = conditions[i]
@@ -49,6 +48,7 @@ const calcLocationKeys = (locationID, keyState, bossState, characterState) => {
   const loc = config.locations.find(item => item.id === locationID)
   let chain = loc.chain.slice(0, loc.chain.length)
 
+  console.log('Chain before', locationID, chain)
   // Remove any items from the chain for which conditions have not been met
   for (let i = 0; i < chain.length; i++) {
     if (!chain.conditions) {
@@ -59,19 +59,24 @@ const calcLocationKeys = (locationID, keyState, bossState, characterState) => {
       i--
     }
   }
+  console.log('Chain after', locationID, chain)
 
   if (chain.length < keys.length + bosses.length + characters.length) {
     console.log("WARNING: calculation of location keys availability + actual length mismatch")
   }
 
   return chain.map(c => {
+    let id
     switch (c.type) {
       case 'key':
-        return keys.length > 0 ? keys.pop() : config.keys[0]
+      id = keys.length > 0 ? keys.pop() : 'empty-key'
+      return config.keys.find(k => k.id === id)
       case 'boss':
-        return bosses.length > 0 ? bosses.pop() : config.keys[1]
+      id = bosses.length > 0 ? bosses.pop() : 'empty-boss'
+      return config.keys.find(k => k.id === id)
       case 'character':
-        return characters.length > 0 ? characters.pop() : config.keys[2]
+      id = characters.length > 0 ? characters.pop() : 'empty-character'
+      return config.keys.find(k => k.id === id)
       default:
         return config.keys[0]
     }
@@ -107,20 +112,40 @@ class App extends React.Component {
 
   // Function to handle clicks on a location
   onLocationSelect = ev => {
-    console.log('Location: ', ev.currentTarget)
     this.setState({
       activeLocation: ev.currentTarget.id
     })
   }
 
-  onLocationKeySelect = ev => {
-    ev.stopPropagation()
-    console.log('Location Key: ', ev.target)
+  onLocationKeySelect = (id, type) => {
+    this.setKeyState(id, type, null)
   }
 
   // Function to handle clicks on a key (add it to selected location)
-  onKeySelect = ev => {
-    console.log('Key: ', ev.currentTarget)
+  onKeySelect = (id, type) => {
+
+    // TODO: check logic BEFORE trying to place key into a location.
+
+    this.setKeyState(id, type, this.state.activeLocation)
+  }
+
+  setKeyState = (id, type, state) => {
+    let base = {}
+    base[id] = state
+
+    switch(type) {
+      case 'key':
+      this.setState({ keyState: Object.assign(this.state.keyState, base) })
+      break
+      case 'boss':
+      this.setState({ bossState: Object.assign(this.state.bossState, base) })
+      break
+      case 'character':
+      this.setState({ characterState: Object.assign(this.state.characterState, base) })
+      break
+      default:
+      break
+    }
   }
 
   render() {

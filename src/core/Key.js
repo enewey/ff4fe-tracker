@@ -2,11 +2,15 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './Key.css'
 
-const Key = ({type, id, graphic, onSelect, active}) => (
-  <div id={id} className={`Key ${(active ? 'active' : false)}`} onClick={onSelect ? onSelect : () => true}>
+const Key = ({type, id, graphic, onSelect, active, used}) => (
+  <div id={id} className={`Key${(active ? ' available' : '')}`} onClick={() => onSelect ? onSelect(id,type) : {}}>
     <img src={graphic.uri} alt={graphic.uri} width={graphic.width} height={graphic.height} />
   </div>
 )
+
+Key.handleClick = ev => {
+
+}
 
 Key.propTypes = {
   type: PropTypes.oneOf(['key','boss','character']).isRequired,
