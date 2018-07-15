@@ -4,7 +4,7 @@ import './Key.css'
 
 const Key = ({type, id, graphic, onSelect, active, used}) => (
   <div id={id} className={`Key${(active ? ' available' : '')}`} onClick={() => onSelect ? onSelect(id,type) : {}}>
-    <img src={graphic.uri} alt={graphic.uri} width={graphic.width} height={graphic.height} />
+    <img src={graphic.uri} alt={graphic.alt} width={graphic.width} height={graphic.height} />
   </div>
 )
 

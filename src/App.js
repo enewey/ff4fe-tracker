@@ -4,6 +4,7 @@ import Key from './core/Key'
 import './App.css'
 import config from './config'
 
+// Extract properties from an object where set[prop] == value
 const extractProps = (value, set) => {
   let ret = []
   for (let prop in set) {
@@ -33,6 +34,9 @@ const checkConditions = (conditions, keyState, bossState) => {
         )
     }
   }
+  if (!test) {
+    console.log("Condition test failed", conditions)
+  }
 
   return test
 }
@@ -48,19 +52,6 @@ const calcLocationKeys = (locationID, keyState, bossState, characterState) => {
   const loc = config.locations.find(item => item.id === locationID)
   let chain = loc.chain.slice(0, loc.chain.length)
 
-  console.log('Chain before', locationID, chain)
-  // Remove any items from the chain for which conditions have not been met
-  for (let i = 0; i < chain.length; i++) {
-    if (!chain.conditions) {
-      continue
-    }
-    if (!checkConditions(chain[i].conditions, keyState, bossState)) {
-      chain.splice(i, 1)
-      i--
-    }
-  }
-  console.log('Chain after', locationID, chain)
-
   if (chain.length < keys.length + bosses.length + characters.length) {
     console.log("WARNING: calculation of location keys availability + actual length mismatch")
   }
@@ -69,17 +60,18 @@ const calcLocationKeys = (locationID, keyState, bossState, characterState) => {
     let id
     switch (c.type) {
       case 'key':
-      id = keys.length > 0 ? keys.pop() : 'empty-key'
-      return config.keys.find(k => k.id === id)
+        id = keys.length > 0 ? keys.pop() : 'empty-key'
+        break
       case 'boss':
-      id = bosses.length > 0 ? bosses.pop() : 'empty-boss'
-      return config.keys.find(k => k.id === id)
+        id = bosses.length > 0 ? bosses.pop() : 'empty-boss'
+        break
       case 'character':
-      id = characters.length > 0 ? characters.pop() : 'empty-character'
-      return config.keys.find(k => k.id === id)
+        id = characters.length > 0 ? characters.pop() : 'empty-character'
+        break
       default:
-        return config.keys[0]
+        id = 'empty-key'
     }
+    return config.keys.find(k => k.id === id)
   })
 }
 
@@ -124,33 +116,85 @@ class App extends React.Component {
   // Function to handle clicks on a key (add it to selected location)
   onKeySelect = (id, type) => {
 
-    // TODO: check logic BEFORE trying to place key into a location.
+    const locationID = this.state.activeLocation
+    let keys
 
-    this.setKeyState(id, type, this.state.activeLocation)
+    switch (type) {
+      case 'key':
+        keys = extractProps(locationID, this.state.keyState)
+        break
+      case 'boss':
+        keys = extractProps(locationID, this.state.bossState)
+        break
+      case 'character':
+        keys = extractProps(locationID, this.state.characterState)
+        break
+      default:
+        keys = []
+    }
+
+    if (Boolean(keys.find(k => k === id))) {
+      return this.setKeyState(id, type, null)
+    }
+
+    const count = config
+      .locations.find(item => item.id === locationID)
+      .chain.filter(x => 
+        x.type === type && 
+        (x.conditions ? checkConditions(x.conditions, this.state.keyState, this.state.bossState) : true)
+      ).length
+
+    if (keys.length < count) {
+      return this.setKeyState(id, type, this.state.activeLocation)
+    }
   }
 
   setKeyState = (id, type, state) => {
     let base = {}
     base[id] = state
 
-    switch(type) {
+    switch (type) {
       case 'key':
-      this.setState({ keyState: Object.assign(this.state.keyState, base) })
-      break
+        this.setState({ keyState: Object.assign(this.state.keyState, base) })
+        break
       case 'boss':
-      this.setState({ bossState: Object.assign(this.state.bossState, base) })
-      break
+        this.setState({ bossState: Object.assign(this.state.bossState, base) })
+        break
       case 'character':
-      this.setState({ characterState: Object.assign(this.state.characterState, base) })
-      break
+        this.setState({ characterState: Object.assign(this.state.characterState, base) })
+        break
       default:
-      break
+        break
     }
   }
 
   render() {
 
     const { keyState, bossState, characterState, activeLocation } = this.state
+
+    const buildKeyRows = (type, kstate) => {
+      let ret = []
+      let innerRet = []
+      let keys = config.keys.filter(key => key.type === type && !key.id.startsWith('empty-'))
+
+      for (let i = 0; i < keys.length; i++) {
+        const key = keys[i]
+        innerRet.push(<Key
+          id={key.id}
+          key={key.id}
+          type={key.type}
+          graphic={key.graphic}
+          onSelect={this.onKeySelect}
+          active={Boolean(kstate[key.id])}
+        />)
+        if (i % 6 === 5 || i === keys.length - 1) {
+          ret.push(<div key={i} className="key-row">{innerRet}</div>)
+          innerRet = []
+        }
+      }
+
+      return ret
+    }
 
     return (
       <div className="App">
@@ -175,43 +219,13 @@ class App extends React.Component {
             <td>
               <div className="keys-container">
                 <div id="keys">
-                  {
-                    config.keys.map(key => key.type === 'key' && !key.id.startsWith('empty-') ?
-                      <Key
-                        id={key.id}
-                        key={key.id}
-                        type={key.type}
-                        graphic={key.graphic}
-                        onSelect={this.onKeySelect}
-                        active={Boolean(keyState[key.id])}
-                      /> : false)
-                  }
+                  {buildKeyRows('key', keyState)}
                 </div>
                 <div id="bosses">
-                  {
-                    config.keys.map(key => key.type === 'boss' && !key.id.startsWith('empty-') ?
-                      <Key
-                        id={key.id}
-                        key={key.id}
-                        type={key.type}
-                        graphic={key.graphic}
-                        onSelect={this.onKeySelect}
-                        active={Boolean(bossState[key.id])}
-                      /> : false)
-                  }
+                  {buildKeyRows('boss', bossState)}
                 </div>
                 <div id="characters">
-                  {
-                    config.keys.map(key => key.type === 'character' && !key.id.startsWith('empty-') ?
-                      <Key
-                        id={key.id}
-                        key={key.id}
-                        type={key.type}
-                        graphic={key.graphic}
-                        onSelect={this.onKeySelect}
-                        active={Boolean(characterState[key.id])}
-                      /> : false)
-                  }
+                  {buildKeyRows('character', characterState)}
                 </div>
               </div>
             </td></tr>
@@ -222,82 +236,11 @@ class App extends React.Component {
 }
 
 const defaultState = {
-  keyState: {
-    'empty-key': null,
-    crystal: null,
-    pass: null,
-    hook: null,
-    darkness: null,
-    earth: null,
-    twinharp: null,
-    package: null,
-    sandruby: null,
-    baron: null,
-    magma: null,
-    tower: null,
-    luca: null,
-    adamant: null,
-    legend: null,
-    pan: null,
-    spoon: null,
-    rat: null,
-    pink: null
-  },
 
-  bossState: {
-    'empty-boss': null,
-    'd-mist': null,
-    'b-soldiers': null,
-    octomamm: null,
-    antlion: null,
-    waterhag: null,
-    mombomb: null,
-    gauntlet: null,
-    milon: null,
-    milonz: null,
-    dkc: null,
-    'b-guards': null,
-    'yang-boss': null,
-    baigan: null,
-    kainazzo: null,
-    darkelf: null,
-    sisters: null,
-    valvalis: null,
-    calbrena: null,
-    golbez: null,
-    lugae: null,
-    'eblan-king-queen': null,
-    rubicant: null,
-    evilwall: null,
-    odin: null,
-    asura: null,
-    leviathan: null,
-    bahamut: null,
-    fiends: null,
-    cpu: null,
-    paledim: null,
-    plague: null,
-    'd-lunar': null,
-    ogopogo: null,
-    wyvern: null
-  },
-
-  characterState: {
-    'empty-character': null,
-    cecil: null,
-    'cecil-paladin': null,
-    kain: null,
-    rydia: null,
-    'rydia-adult': null,
-    tellah: null,
-    edward: null,
-    rosa: null,
-    yang: null,
-    porom: null,
-    palom: null,
-    cid: null,
-    fusoya: null
-  },
+  // State objects are maps of keyIDs to locationIDs
+  keyState: {},
+  bossState: {},
+  characterState: {},
 
   activeLocation: 'baron-inn',
 }
