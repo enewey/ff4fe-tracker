@@ -39,7 +39,7 @@ const keys = [
     type: 'key',
     id: 'crystal',
     graphic: {
-      uri: 'img/test-key.png',
+      uri: 'img/keys/test-key.png',
       alt: 'Crystal',
       width: dW,
       height: dH
@@ -49,7 +49,7 @@ const keys = [
     type: 'key',
     id: 'pass',
     graphic: {
-      uri: 'img/test-key.png',
+      uri: 'img/keys/test-key.png',
       alt: 'Pass',
       width: dW,
       height: dH
@@ -59,7 +59,7 @@ const keys = [
     type: 'key',
     id: 'hook',
     graphic: {
-      uri: 'img/test-key.png',
+      uri: 'img/keys/test-key.png',
       alt: 'Hook',
       width: dW,
       height: dH
@@ -69,7 +69,7 @@ const keys = [
     type: 'key',
     id: 'darkness',
     graphic: {
-      uri: 'img/test-key.png',
+      uri: 'img/keys/test-key.png',
       alt: 'Darkness Crystal',
       width: dW,
       height: dH
@@ -79,7 +79,7 @@ const keys = [
     type: 'key',
     id: 'earth',
     graphic: {
-      uri: 'img/test-key.png',
+      uri: 'img/keys/test-key.png',
       alt: 'Earth Crystal',
       width: dW,
       height: dH
@@ -89,7 +89,7 @@ const keys = [
     type: 'key',
     id: 'twinharp',
     graphic: {
-      uri: 'img/test-key.png',
+      uri: 'img/keys/test-key.png',
       alt: 'Twinharp',
       width: dW,
       height: dH
@@ -99,7 +99,7 @@ const keys = [
     type: 'key',
     id: 'package',
     graphic: {
-      uri: 'img/test-key.png',
+      uri: 'img/keys/test-key.png',
       alt: 'Package',
       width: dW,
       height: dH
@@ -109,7 +109,7 @@ const keys = [
     type: 'key',
     id: 'sandruby',
     graphic: {
-      uri: 'img/test-key.png',
+      uri: 'img/keys/test-key.png',
       alt: 'Sandruby',
       width: dW,
       height: dH
@@ -119,7 +119,7 @@ const keys = [
     type: 'key',
     id: 'baron',
     graphic: {
-      uri: 'img/test-key.png',
+      uri: 'img/keys/test-key.png',
       alt: 'Baron Key',
       width: dW,
       height: dH
@@ -129,7 +129,7 @@ const keys = [
     type: 'key',
     id: 'magma',
     graphic: {
-      uri: 'img/test-key.png',
+      uri: 'img/keys/test-key.png',
       alt: 'Magma Key',
       width: dW,
       height: dH
@@ -139,7 +139,7 @@ const keys = [
     type: 'key',
     id: 'tower',
     graphic: {
-      uri: 'img/test-key.png',
+      uri: 'img/keys/test-key.png',
       alt: 'Tower Key',
       width: dW,
       height: dH
@@ -149,7 +149,7 @@ const keys = [
     type: 'key',
     id: 'luca',
     graphic: {
-      uri: 'img/test-key.png',
+      uri: 'img/keys/test-key.png',
       alt: 'Luca Key',
       width: dW,
       height: dH
@@ -159,7 +159,7 @@ const keys = [
     type: 'key',
     id: 'adamant',
     graphic: {
-      uri: 'img/test-key.png',
+      uri: 'img/keys/test-key.png',
       alt: 'Adamant',
       width: dW,
       height: dH
@@ -169,7 +169,7 @@ const keys = [
     type: 'key',
     id: 'legend',
     graphic: {
-      uri: 'img/test-key.png',
+      uri: 'img/keys/test-key.png',
       alt: 'Legend Sword',
       width: dW,
       height: dH
@@ -179,7 +179,7 @@ const keys = [
     type: 'key',
     id: 'pan',
     graphic: {
-      uri: 'img/test-key.png',
+      uri: 'img/keys/test-key.png',
       alt: 'Pan',
       width: dW,
       height: dH
@@ -189,7 +189,7 @@ const keys = [
     type: 'key',
     id: 'spoon',
     graphic: {
-      uri: 'img/test-key.png',
+      uri: 'img/keys/test-key.png',
       alt: 'Spoon',
       width: dW,
       height: dH
@@ -199,7 +199,7 @@ const keys = [
     type: 'key',
     id: 'rat',
     graphic: {
-      uri: 'img/test-key.png',
+      uri: 'img/keys/test-key.png',
       alt: 'Rat Tail',
       width: dW,
       height: dH
@@ -209,7 +209,7 @@ const keys = [
     type: 'key',
     id: 'pink',
     graphic: {
-      uri: 'img/test-key.png',
+      uri: 'img/keys/test-key.png',
       alt: 'Pink Tail',
       width: dW,
       height: dH
@@ -221,7 +221,7 @@ const keys = [
     type: 'boss',
     id: 'd-mist',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'D. Mist',
       width: dW,
       height: dH
@@ -231,7 +231,7 @@ const keys = [
     type: 'boss',
     id: 'b-soldiers',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Baron Soldiers',
       width: dW,
       height: dH
@@ -241,7 +241,7 @@ const keys = [
     type: 'boss',
     id: 'octomamm',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Octomamm',
       width: dW,
       height: dH
@@ -251,7 +251,7 @@ const keys = [
     type: 'boss',
     id: 'antlion',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Antlion',
       width: dW,
       height: dH
@@ -261,7 +261,7 @@ const keys = [
     type: 'boss',
     id: 'waterhag',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Waterhag',
       width: dW,
       height: dH
@@ -271,7 +271,7 @@ const keys = [
     type: 'boss',
     id: 'mombomb',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'MomBomb',
       width: dW,
       height: dH
@@ -281,7 +281,7 @@ const keys = [
     type: 'boss',
     id: 'gauntlet',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Fabul Gauntlet',
       width: dW,
       height: dH
@@ -291,7 +291,7 @@ const keys = [
     type: 'boss',
     id: 'milon',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Milon',
       width: dW,
       height: dH
@@ -301,7 +301,7 @@ const keys = [
     type: 'boss',
     id: 'milonz',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Milon Z.',
       width: dW,
       height: dH
@@ -311,7 +311,7 @@ const keys = [
     type: 'boss',
     id: 'dkc',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Dark Knight Cecil',
       width: dW,
       height: dH
@@ -321,7 +321,7 @@ const keys = [
     type: 'boss',
     id: 'b-guards',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Baron Guards',
       width: dW,
       height: dH
@@ -331,7 +331,7 @@ const keys = [
     type: 'boss',
     id: 'yang-boss',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Yang',
       width: dW,
       height: dH
@@ -341,7 +341,7 @@ const keys = [
     type: 'boss',
     id: 'baigan',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Baigan',
       width: dW,
       height: dH
@@ -351,7 +351,7 @@ const keys = [
     type: 'boss',
     id: 'kainazzo',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Kainazzo',
       width: dW,
       height: dH
@@ -361,7 +361,7 @@ const keys = [
     type: 'boss',
     id: 'darkelf',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Dark Elf',
       width: dW,
       height: dH
@@ -371,7 +371,7 @@ const keys = [
     type: 'boss',
     id: 'sisters',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Magus Sisters',
       width: dW,
       height: dH
@@ -381,7 +381,7 @@ const keys = [
     type: 'boss',
     id: 'valvalis',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Valvalis',
       width: dW,
       height: dH
@@ -391,7 +391,7 @@ const keys = [
     type: 'boss',
     id: 'calbrena',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Calbrena',
       width: dW,
       height: dH
@@ -401,7 +401,7 @@ const keys = [
     type: 'boss',
     id: 'golbez',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Golbez',
       width: dW,
       height: dH
@@ -411,7 +411,7 @@ const keys = [
     type: 'boss',
     id: 'lugae',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Lugae & Balnab',
       width: dW,
       height: dH
@@ -421,7 +421,7 @@ const keys = [
     type: 'boss',
     id: 'eblan-king-queen',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'King & Queen Eblan',
       width: dW,
       height: dH
@@ -431,7 +431,7 @@ const keys = [
     type: 'boss',
     id: 'rubicant',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Rubicant',
       width: dW,
       height: dH
@@ -441,7 +441,7 @@ const keys = [
     type: 'boss',
     id: 'evilwall',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'EvilWall',
       width: dW,
       height: dH
@@ -451,7 +451,7 @@ const keys = [
     type: 'boss',
     id: 'odin',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Odin',
       width: dW,
       height: dH
@@ -461,7 +461,7 @@ const keys = [
     type: 'boss',
     id: 'Asura',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'asura',
       width: dW,
       height: dH
@@ -471,7 +471,7 @@ const keys = [
     type: 'boss',
     id: 'leviathan',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Leviathan',
       width: dW,
       height: dH
@@ -481,7 +481,7 @@ const keys = [
     type: 'boss',
     id: 'bahamut',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Bahamut',
       width: dW,
       height: dH
@@ -491,7 +491,7 @@ const keys = [
     type: 'boss',
     id: 'fiends',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Elemental Fiends',
       width: dW,
       height: dH
@@ -501,7 +501,7 @@ const keys = [
     type: 'boss',
     id: 'cpu',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'CPU',
       width: dW,
       height: dH
@@ -511,7 +511,7 @@ const keys = [
     type: 'boss',
     id: 'paledim',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Pale Dim',
       width: dW,
       height: dH
@@ -521,7 +521,7 @@ const keys = [
     type: 'boss',
     id: 'plague',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Plague',
       width: dW,
       height: dH
@@ -531,7 +531,7 @@ const keys = [
     type: 'boss',
     id: 'd-lunar',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Lunar Dragons',
       width: dW,
       height: dH
@@ -541,7 +541,7 @@ const keys = [
     type: 'boss',
     id: 'ogopogo',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Ogopogo',
       width: dW,
       height: dH
@@ -551,7 +551,7 @@ const keys = [
     type: 'boss',
     id: 'wyvern',
     graphic: {
-      uri: 'img/test-boss.png',
+      uri: 'img/bosses/test-boss.png',
       alt: 'Wyvern',
       width: dW,
       height: dH
@@ -564,7 +564,7 @@ const keys = [
     type: 'character',
     id: 'cecil',
     graphic: {
-      uri: 'img/test-character.png',
+      uri: 'img/characters/cecil-normal.png',
       alt: 'Cecil (Dark Knight)',
       width: dW,
       height: dH
@@ -574,7 +574,7 @@ const keys = [
     type: 'character',
     id: 'cecil-paladin',
     graphic: {
-      uri: 'img/test-character.png',
+      uri: 'img/characters/cecil-paladin-normal.png',
       alt: 'Cecil (Paladin)',
       width: dW,
       height: dH
@@ -584,7 +584,7 @@ const keys = [
     type: 'character',
     id: 'kain',
     graphic: {
-      uri: 'img/test-character.png',
+      uri: 'img/characters/kain-normal.png',
       alt: 'Kain',
       width: dW,
       height: dH
@@ -594,7 +594,7 @@ const keys = [
     type: 'character',
     id: 'rydia',
     graphic: {
-      uri: 'img/test-character.png',
+      uri: 'img/characters/rydia-normal.png',
       alt: 'Rydia (Child)',
       width: dW,
       height: dH
@@ -604,7 +604,7 @@ const keys = [
     type: 'character',
     id: 'rydia-adult',
     graphic: {
-      uri: 'img/test-character.png',
+      uri: 'img/characters/rydia-adult-normal.png',
       alt: 'Rydia (Adult)',
       width: dW,
       height: dH
@@ -614,7 +614,7 @@ const keys = [
     type: 'character',
     id: 'tellah',
     graphic: {
-      uri: 'img/test-character.png',
+      uri: 'img/characters/tellah-normal.png',
       alt: 'Tellah',
       width: dW,
       height: dH
@@ -624,7 +624,7 @@ const keys = [
     type: 'character',
     id: 'edward',
     graphic: {
-      uri: 'img/test-character.png',
+      uri: 'img/characters/edward-normal.png',
       alt: 'Edward',
       width: dW,
       height: dH
@@ -634,7 +634,7 @@ const keys = [
     type: 'character',
     id: 'rosa',
     graphic: {
-      uri: 'img/test-character.png',
+      uri: 'img/characters/rosa-normal.png',
       alt: 'Rosa',
       width: dW,
       height: dH
@@ -644,7 +644,7 @@ const keys = [
     type: 'character',
     id: 'yang',
     graphic: {
-      uri: 'img/test-character.png',
+      uri: 'img/characters/yang-normal.png',
       alt: 'Yang',
       width: dW,
       height: dH
@@ -654,7 +654,7 @@ const keys = [
     type: 'character',
     id: 'porom',
     graphic: {
-      uri: 'img/test-character.png',
+      uri: 'img/characters/porom-normal.png',
       alt: 'Porom',
       width: dW,
       height: dH
@@ -664,7 +664,7 @@ const keys = [
     type: 'character',
     id: 'palom',
     graphic: {
-      uri: 'img/test-character.png',
+      uri: 'img/characters/palom-normal.png',
       alt: 'Palom',
       width: dW,
       height: dH
@@ -674,7 +674,7 @@ const keys = [
     type: 'character',
     id: 'cid',
     graphic: {
-      uri: 'img/test-character.png',
+      uri: 'img/characters/cid-normal.png',
       alt: 'Cid',
       width: dW,
       height: dH
@@ -684,7 +684,7 @@ const keys = [
     type: 'character',
     id: 'fusoya',
     graphic: {
-      uri: 'img/test-character.png',
+      uri: 'img/characters/fusoya-normal.png',
       alt: 'FuSoYa',
       width: dW,
       height: dH
