@@ -3,27 +3,31 @@
     flex-direction: row;
     justify-content: left;
 
-    width: 100%;
     height: 32px;
-
+    width: 290px;
     padding: 2px;
 
-    opacity: 0.6;
     border: 2px;
     border-color: #22a;
     border-style: solid;
-}
-
-.Location:hover {
-    background-color: #33b;
 }
 
 .Location.selected {
     border-color: #ff0;
 }
 
-.available {
-    opacity: 1.0;
+.Location img {
+    -webkit-filter: grayscale(100%);
+    filter: grayscale(100%);
+    -webkit-filter: brightness(50%);
+    filter: brightness(50%);
+}
+
+.available img {
+    -webkit-filter: grayscale(0%);
+    filter: grayscale(0%);
+    -webkit-filter: brightness(100%);
+    filter: brightness(100%);
 }
 
 .divider {

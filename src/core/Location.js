@@ -9,7 +9,7 @@ const Location = ({id, keys, graphic, onSelect, onKeySelect, available, active})
     <div id={id} className={`Location${(active ? ' selected' : '')}${(available ? ' available' : '')}`} onClick={onSelect} >
         <img src={graphic.uri} width={graphic.width} height={graphic.height} alt={graphic.alt} />
         <div className='divider' />
-        { keys.map((v,i) => <Key key={`${v.id}-${i}`} type={v.type} id={v.id} graphic={v.graphic} onSelect={onKeySelect}/>) }
+        { keys.map((v,i) => <Key key={`${v.id}-${i}`} type={v.type} id={v.id} graphic={v.graphic} onSelect={onKeySelect} active={true} />) }
     </div>
 )}
 

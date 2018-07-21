@@ -6,18 +6,18 @@
 
   height: 32px;
   margin: 0 2px;
-
-  opacity: 0.6;
 }
 
-.Key:hover {
-  opacity: 1.0;
+.Key img {
+  -webkit-filter: grayscale(100%);
+  filter: grayscale(100%);
+  -webkit-filter: brightness(50%);
+  filter: brightness(50%);
 }
 
-.available {
-  opacity: 1.0;
-}
-
-.used {
-  opacity: 0.3;
+.available img {
+  -webkit-filter: grayscale(0%);
+  filter: grayscale(0%);
+  -webkit-filter: brightness(100%);
+  filter: brightness(100%);
 }

@@ -5,16 +5,25 @@
   background-color: #22a;
   color: #fff;
   width: 100%;
+  height: 100vw;
+}
+
+.keys-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+}
+
+.key-section {
+  margin: 0 0 32px 0;
 }
 
 #locations {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-
-}
-
-table tr td {
-  border: none;
-  vertical-align: top;
+  flex-wrap: wrap;
+  max-height: 35vw;
+  width: 600px;
+  float: left;
 }

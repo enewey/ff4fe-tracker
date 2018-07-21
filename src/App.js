@@ -34,9 +34,6 @@ const checkConditions = (conditions, keyState, bossState) => {
         )
     }
   }
-  if (!test) {
-    console.log("Condition test failed", conditions)
-  }
 
   return test
 }
@@ -80,8 +77,8 @@ const calcLocationAvailability = (locationID, keyState, bossState) => {
   let chain = loc.chain.slice(0, loc.chain.length - 1)
 
   for (let i = 0; i < chain.length; i++) {
-    if (!chain.conditions) {
-      continue
+    if (!chain[i].conditions) {
+      return true
     }
     if (checkConditions(chain[i].conditions, keyState, bossState)) {
       return true
@@ -104,6 +101,7 @@ class App extends React.Component {
 
   // Function to handle clicks on a location
   onLocationSelect = ev => {
+    console.log('Location selected', ev.currentTarget.id)
     this.setState({
       activeLocation: ev.currentTarget.id
     })
@@ -139,8 +137,8 @@ class App extends React.Component {
 
     const count = config
       .locations.find(item => item.id === locationID)
-      .chain.filter(x => 
-        x.type === type && 
+      .chain.filter(x =>
+        x.type === type &&
         (x.conditions ? checkConditions(x.conditions, this.state.keyState, this.state.bossState) : true)
       ).length
 
@@ -198,38 +196,32 @@ class App extends React.Component {
 
     return (
       <div className="App">
-        <table><tbody>
-          <tr><td>
-            <div id="locations">
-              {
-                config.locations.map(loc =>
-                  <Location
-                    id={loc.id}
-                    key={loc.id}
-                    keys={calcLocationKeys(loc.id, keyState, bossState, characterState)}
-                    graphic={loc.graphic}
-                    onSelect={this.onLocationSelect}
-                    onKeySelect={this.onLocationKeySelect}
-                    available={calcLocationAvailability(loc.id, keyState, bossState)}
-                    active={activeLocation === loc.id}
-                  />)
-              }
-            </div>
-          </td>
-            <td>
-              <div className="keys-container">
-                <div id="keys">
-                  {buildKeyRows('key', keyState)}
-                </div>
-                <div id="bosses">
-                  {buildKeyRows('boss', bossState)}
-                </div>
-                <div id="characters">
-                  {buildKeyRows('character', characterState)}
-                </div>
-              </div>
-            </td></tr>
-        </tbody></table>
+        <div id="locations">
+          {
+            config.locations.map(loc =>
+              <Location
+                id={loc.id}
+                key={loc.id}
+                keys={calcLocationKeys(loc.id, keyState, bossState, characterState)}
+                graphic={loc.graphic}
+                onSelect={this.onLocationSelect}
+                onKeySelect={this.onLocationKeySelect}
+                available={calcLocationAvailability(loc.id, keyState, bossState)}
+                active={activeLocation === loc.id}
+              />)
+          }
+        </div>
+        <div className="keys-container">
+          <div id="keys" className="key-section">
+            {buildKeyRows('key', keyState)}
+          </div>
+          <div id="bosses" className="key-section">
+            {buildKeyRows('boss', bossState)}
+          </div>
+          <div id="characters" className="key-section">
+            {buildKeyRows('character', characterState)}
+          </div>
+        </div>
       </div>
     )
   }
