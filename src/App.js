@@ -196,6 +196,21 @@ class App extends React.Component {
 
     return (
       <div className="App">
+        <div className="info">
+          <p>Tracker by narcodis</p>
+          <p>Suggestions/feedback: <a href="mailto:narcodis@gmail.com">narcodis@gmail.com</a></p>
+        </div>
+        <div className="keys-container">
+          <div id="keys" className="key-section">
+            {buildKeyRows('key', keyState)}
+          </div>
+          <div id="bosses" className="key-section">
+            {buildKeyRows('boss', bossState)}
+          </div>
+          <div id="characters" className="key-section">
+            {buildKeyRows('character', characterState)}
+          </div>
+        </div>
         <div id="locations">
           {
             config.locations.map(loc =>
@@ -210,18 +225,7 @@ class App extends React.Component {
                 active={activeLocation === loc.id}
               />)
           }
-        </div>
-        <div className="keys-container">
-          <div id="keys" className="key-section">
-            {buildKeyRows('key', keyState)}
-          </div>
-          <div id="bosses" className="key-section">
-            {buildKeyRows('boss', bossState)}
-          </div>
-          <div id="characters" className="key-section">
-            {buildKeyRows('character', characterState)}
-          </div>
-        </div>
+        </div>        
       </div>
     )
   }

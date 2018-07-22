@@ -4,7 +4,7 @@
     justify-content: left;
 
     height: 32px;
-    width: 290px;
+    width: 280px;
     padding: 2px;
 
     border: 2px;
@@ -36,5 +36,5 @@
     background-color: #fff;
     color: #fff;
     padding: 0px;
-    margin: 0 16px;
+    margin: 0 8px;
 }
