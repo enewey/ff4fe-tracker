@@ -4,7 +4,20 @@ const dW = 32;
 const locations = [
   
   // Main World
-
+  {
+    id: 'intro',
+    chain: [
+      { type: 'character' },
+      { type: 'character' },
+      { type: 'key' }
+    ],
+    graphic: {
+      uri: 'img/locations/test-location.png',
+      alt: 'Intro at Baron',
+      width: dW,
+      height: dH
+    }
+  },
   {
     id: 'adamant-cave',
     chain: [
@@ -95,6 +108,19 @@ const locations = [
     graphic: {
       uri: 'img/locations/test-location.png',
       alt: 'Baron Inn',
+      width: dW,
+      height: dH
+    }
+  },
+  {
+    id: 'antlion',
+    chain: [
+      { type: 'boss' },
+      { type: 'key' }
+    ],
+    graphic: {
+      uri: 'img/locations/test-location.png',
+      alt: 'Antlion\'s Nest',
       width: dW,
       height: dH
     }

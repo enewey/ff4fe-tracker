@@ -17,6 +17,45 @@ const extractProps = (value, set) => {
   return ret
 }
 
+const calcLocationKeys = (locationID, keyState, bossState, characterState) => {
+
+  // Get the right keys
+  const keys = extractProps(locationID, keyState)
+  const bosses = extractProps(locationID, bossState)
+  const characters = extractProps(locationID, characterState)
+
+  // Get the chain for the location
+  const loc = config.locations.find(item => item.id === locationID)
+
+  if (loc.chain.length < keys.length + bosses.length + characters.length) {
+    console.log("WARNING: calculation of location keys availability + actual length mismatch")
+  }
+
+  let ret = loc.chain.map(c => {
+    let id
+    switch (c.type) {
+      case 'key':
+        id = keys.length > 0 ? keys.pop() : 'empty-key'
+        break
+      case 'boss':
+        id = bosses.length > 0 ? bosses.pop() : 'empty-boss'
+        break
+      case 'character':
+        id = characters.length > 0 ? characters.pop() : 'empty-character'
+        break
+      default:
+        id = 'empty-key'
+    }
+    return Object.assign(
+      { active: c.conditions ? checkConditions(c.conditions, keyState, bossState) : true }, 
+      config.keys.find(k => k.id === id)
+    )
+
+  })
+
+  return ret
+}
+
 const checkConditions = (conditions, keyState, bossState) => {
   let test = true;
   for (let i = 0; i < conditions.length; i++) {
@@ -38,54 +77,34 @@ const checkConditions = (conditions, keyState, bossState) => {
   return test
 }
 
-const calcLocationKeys = (locationID, keyState, bossState, characterState) => {
-
-  // Get the right keys
-  const keys = extractProps(locationID, keyState)
-  const bosses = extractProps(locationID, bossState)
-  const characters = extractProps(locationID, characterState)
-
-  // Get the chain for the location
-  const loc = config.locations.find(item => item.id === locationID)
-  let chain = loc.chain.slice(0, loc.chain.length)
-
-  if (chain.length < keys.length + bosses.length + characters.length) {
-    console.log("WARNING: calculation of location keys availability + actual length mismatch")
-  }
-
-  return chain.map(c => {
-    let id
-    switch (c.type) {
-      case 'key':
-        id = keys.length > 0 ? keys.pop() : 'empty-key'
-        break
-      case 'boss':
-        id = bosses.length > 0 ? bosses.pop() : 'empty-boss'
-        break
-      case 'character':
-        id = characters.length > 0 ? characters.pop() : 'empty-character'
-        break
-      default:
-        id = 'empty-key'
-    }
-    return config.keys.find(k => k.id === id)
-  })
-}
-
 const calcLocationAvailability = (locationID, keyState, bossState) => {
-  const loc = config.locations.find(item => item.id === locationID)
-  let chain = loc.chain.slice(0, loc.chain.length - 1)
+  const loc = config.locations.find(location => location.id === locationID)
 
-  for (let i = 0; i < chain.length; i++) {
-    if (!chain[i].conditions) {
+  for (let i = 0; i < loc.chain.length; i++) {
+    if (!loc.chain[i].conditions) {
       return true
     }
-    if (checkConditions(chain[i].conditions, keyState, bossState)) {
+    if (checkConditions(loc.chain[i].conditions, keyState, bossState)) {
       return true
     }
   }
 
   return false
+}
+
+const checkKeySpecial = (key, keyState, bossState, characterState) => {
+  if (config.specials.hasOwnProperty(key.id)) {
+    let loc = config.specials[key.id].condition.location
+    let num = config.specials[key.id].condition.num
+    let count = []
+    count.splice(0,0,...Object.keys(keyState).filter(k => keyState[k] === loc))
+    count.splice(0,0,...Object.keys(bossState).filter(k => bossState[k] === loc))
+    count.splice(0,0,...Object.keys(characterState).filter(k => characterState[k] === loc))
+    if (count.length >= num) {
+      return Object.assign(key, { graphic: config.specials[key.id].graphic })
+    }
+  }
+  return key
 }
 
 class App extends React.Component {
@@ -131,9 +150,11 @@ class App extends React.Component {
         keys = []
     }
 
+    // If key is already selected, deselect the key.
     if (Boolean(keys.find(k => k === id))) {
       return this.setKeyState(id, type, null)
     }
+
 
     const count = config
       .locations.find(item => item.id === locationID)
@@ -176,7 +197,7 @@ class App extends React.Component {
       let keys = config.keys.filter(key => key.type === type && !key.id.startsWith('empty-'))
 
       for (let i = 0; i < keys.length; i++) {
-        const key = keys[i]
+        const key = checkKeySpecial(keys[i], keyState, bossState, characterState)
         innerRet.push(<Key
           id={key.id}
           key={key.id}
@@ -195,37 +216,40 @@ class App extends React.Component {
     }
 
     return (
-      <div className="App">
+      <div className="container">
+        <div className="App">
+          <div className="keys-container">
+            <div id="keys" className="key-section">
+              {buildKeyRows('key', keyState)}
+            </div>
+            <div id="bosses" className="key-section">
+              {buildKeyRows('boss', bossState)}
+            </div>
+            <div id="characters" className="key-section no-border">
+              {buildKeyRows('character', characterState)}
+            </div>
+          </div>
+          <div id="locations">
+            {
+              config.locations.map(loc =>
+                <Location
+                  id={loc.id}
+                  key={loc.id}
+                  keys={calcLocationKeys(loc.id, keyState, bossState, characterState)}
+                  graphic={loc.graphic}
+                  onSelect={this.onLocationSelect}
+                  onKeySelect={this.onLocationKeySelect}
+                  available={calcLocationAvailability(loc.id, keyState, bossState)}
+                  active={activeLocation === loc.id}
+                />)
+            }
+          </div>
+        </div>
         <div className="info">
+          <p>Selected: {activeLocation}</p>
           <p>Tracker by narcodis</p>
           <p>Suggestions/feedback: <a href="mailto:narcodis@gmail.com">narcodis@gmail.com</a></p>
         </div>
-        <div className="keys-container">
-          <div id="keys" className="key-section">
-            {buildKeyRows('key', keyState)}
-          </div>
-          <div id="bosses" className="key-section">
-            {buildKeyRows('boss', bossState)}
-          </div>
-          <div id="characters" className="key-section">
-            {buildKeyRows('character', characterState)}
-          </div>
-        </div>
-        <div id="locations">
-          {
-            config.locations.map(loc =>
-              <Location
-                id={loc.id}
-                key={loc.id}
-                keys={calcLocationKeys(loc.id, keyState, bossState, characterState)}
-                graphic={loc.graphic}
-                onSelect={this.onLocationSelect}
-                onKeySelect={this.onLocationKeySelect}
-                available={calcLocationAvailability(loc.id, keyState, bossState)}
-                active={activeLocation === loc.id}
-              />)
-          }
-        </div>        
       </div>
     )
   }
@@ -238,7 +262,7 @@ const defaultState = {
   bossState: {},
   characterState: {},
 
-  activeLocation: 'baron-inn',
+  activeLocation: 'intro',
 }
 
 export default App

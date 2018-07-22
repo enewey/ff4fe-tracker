@@ -592,16 +592,6 @@ const keys = [
   },
   {
     type: 'character',
-    id: 'cecil-paladin',
-    graphic: {
-      uri: 'img/characters/cecil-paladin-normal.png',
-      alt: 'Cecil (Paladin)',
-      width: dW,
-      height: dH
-    }
-  },
-  {
-    type: 'character',
     id: 'kain',
     graphic: {
       uri: 'img/characters/kain-normal.png',
@@ -616,16 +606,6 @@ const keys = [
     graphic: {
       uri: 'img/characters/rydia-normal.png',
       alt: 'Rydia (Child)',
-      width: dW,
-      height: dH
-    }
-  },
-  {
-    type: 'character',
-    id: 'rydia-adult',
-    graphic: {
-      uri: 'img/characters/rydia-adult-normal.png',
-      alt: 'Rydia (Adult)',
       width: dW,
       height: dH
     }
@@ -696,6 +676,16 @@ const keys = [
     graphic: {
       uri: 'img/characters/cid-normal.png',
       alt: 'Cid',
+      width: dW,
+      height: dH
+    }
+  },
+  {
+    type: 'character',
+    id: 'edge',
+    graphic: {
+      uri: 'img/characters/edge-normal.png',
+      alt: 'Edge',
       width: dW,
       height: dH
     }

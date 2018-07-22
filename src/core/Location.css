@@ -10,6 +10,12 @@
     border: 2px;
     border-color: #22a;
     border-style: solid;
+
+    cursor: pointer;
+}
+
+.Location:hover {
+    border-color: #aaa;
 }
 
 .Location.selected {

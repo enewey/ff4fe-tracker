@@ -1,8 +1,10 @@
 .App {
-  position: absolute;
+  /* position: absolute; */
 
   width: 100%;
-  height: 100vw;
+
+  display: flex;
+  flex-wrap: nowrap;
 }
 
 .keys-container {
@@ -17,16 +19,25 @@
   border-bottom: 2px solid #fff;
 }
 
+.no-border {
+  border: none;
+}
+
 #locations {
   display: inline-flex;
   justify-content: flex-start;
   flex-direction: column;
   flex-wrap: wrap;
-  height: 500px;
+  height: 550px;
   width: 600px;
   border: 1px dotted black;
   resize: both;
   overflow: hidden;
+}
+
+.info {
+  position: relative;
+  display: block;
 }
 
 /* Global element styling */
