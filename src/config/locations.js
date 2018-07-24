@@ -12,21 +12,21 @@ const locations = [
       { type: 'key' }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/intro.png',
       alt: 'Intro at Baron',
       width: dW,
       height: dH
     }
   },
   {
-    id: 'adamant-cave',
+    id: 'adamant-grotto',
     chain: [
       { type: 'key', conditions: ['hook', 'rat'] },
-      { type: 'key', conditions: ['hook', 'pink'] }
+      // { type: 'key', conditions: ['hook', 'pink'] }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
-      alt: 'Adamant Cave',
+      uri: 'img/locations/adamant-grotto.png',
+      alt: 'Adamant Grotto',
       width: dW,
       height: dH
     }
@@ -39,7 +39,7 @@ const locations = [
       { type: 'character', conditions: ['package'] }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/mist-village.png',
       alt: 'Village of Mist',
       width: dW,
       height: dH
@@ -51,7 +51,7 @@ const locations = [
       { type: 'character', conditions: ['sandruby'] }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/kaipo.png',
       alt: 'Kaipo',
       width: dW,
       height: dH
@@ -63,7 +63,7 @@ const locations = [
       { type: 'boss' }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/watery.png',
       alt: 'Watery Pass',
       width: dW,
       height: dH
@@ -75,7 +75,7 @@ const locations = [
       { type: 'boss' }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/mist-cave.png',
       alt: 'Misty Cave',
       width: dW,
       height: dH
@@ -91,7 +91,7 @@ const locations = [
       { type: 'boss',       conditions: ['baron'] }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/baron-castle.png',
       alt: 'Baron Castle',
       width: dW,
       height: dH
@@ -106,7 +106,7 @@ const locations = [
       { type: 'key' }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/baron-inn.png',
       alt: 'Baron Inn',
       width: dW,
       height: dH
@@ -119,7 +119,7 @@ const locations = [
       { type: 'key' }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/antlion.png',
       alt: 'Antlion\'s Nest',
       width: dW,
       height: dH
@@ -132,7 +132,7 @@ const locations = [
       { type: 'character' }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/hobs.png',
       alt: 'Mt Hobs',
       width: dW,
       height: dH
@@ -145,7 +145,7 @@ const locations = [
       { type: 'key' }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/fabul.png',
       alt: 'Fabul',
       width: dW,
       height: dH
@@ -158,7 +158,7 @@ const locations = [
       { type: 'key', conditions: ['pan', [ 'magma', 'hook' ] ] }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/fabul-wife.png',
       alt: 'Fabul - Yang\'s Wife',
       width: dW,
       height: dH
@@ -171,7 +171,7 @@ const locations = [
       { type: 'key',  conditions: ['twinharp'] }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/magnes.png',
       alt: 'Magnes Cave',
       width: dW,
       height: dH
@@ -186,7 +186,7 @@ const locations = [
       { type: 'boss' }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/ordeals.png',
       alt: 'Mt. Ordeals',
       width: dW,
       height: dH
@@ -202,7 +202,7 @@ const locations = [
       { type: 'key',        conditions: ['earth'] }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/zot.png',
       alt: 'Tower of Zot',
       width: dW,
       height: dH
@@ -216,7 +216,7 @@ const locations = [
       { type: 'boss',       conditions: ['hook'] }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/eblan.png',
       alt: 'Cave of Eblan',
       width: dW,
       height: dH
@@ -234,24 +234,24 @@ const locations = [
       { type: 'key',        conditions: [ [ 'magma', 'hook' ] ] }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/dwarf-castle.png',
       alt: 'Dwarf Castle',
       width: dW,
       height: dH
     }
   },
-  {
-    id: 'sylph',
-    chain: [
-      { type: 'key', conditions: [ 'pan', [ 'magma', 'hook' ] ] }
-    ],
-    graphic: {
-      uri: 'img/locations/test-location.png',
-      alt: 'Sylph Cave',
-      width: dW,
-      height: dH
-    }
-  },
+  // {
+  //   id: 'sylvan-cave',
+  //   chain: [
+  //     // { type: 'key', conditions: [ 'pan', [ 'magma', 'hook' ] ] }
+  //   ],
+  //   graphic: {
+  //     uri: 'img/locations/sylvan-cave.png',
+  //     alt: 'Sylvan Cave',
+  //     width: dW,
+  //     height: dH
+  //   }
+  // },
   {
     id: 'feymarch',
     chain: [
@@ -262,7 +262,7 @@ const locations = [
       // key K2+
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/feymarch.png',
       alt: 'Feymarch',
       width: dW,
       height: dH
@@ -275,7 +275,7 @@ const locations = [
       { type: 'boss', conditions: [ 'luca', [ 'magma', 'hook' ] ] }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/sealed.png',
       alt: 'Sealed Cave',
       width: dW,
       height: dH
@@ -290,7 +290,7 @@ const locations = [
       { type: 'key',  conditions: [ 'tower', [ 'magma', 'hook' ] ] }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/babil.png',
       alt: 'Tower of Babil',
       width: dW,
       height: dH
@@ -305,7 +305,7 @@ const locations = [
       { type: 'character', conditions: [ 'darkness' ] }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/palace.png',
       alt: 'Crystal Palace',
       width: dW,
       height: dH
@@ -317,7 +317,7 @@ const locations = [
       { type: 'boss', conditions: [ 'darkness' ] }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/bahamut.png',
       alt: 'Bahamut\'s Cave',
       width: dW,
       height: dH
@@ -333,7 +333,7 @@ const locations = [
       { type: 'boss', conditions: [ 'darkness' ] }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/lunar.png',
       alt: 'Lunar Subterrane',
       width: dW,
       height: dH
@@ -346,7 +346,7 @@ const locations = [
       { type: 'boss', conditions: [ 'darkness' ] }
     ],
     graphic: {
-      uri: 'img/locations/test-location.png',
+      uri: 'img/locations/giant.png',
       alt: 'Giant of Bab-Il',
       width: dW,
       height: dH

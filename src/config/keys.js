@@ -6,7 +6,7 @@ const keys = [
     type: 'key',
     id: 'empty-key',
     graphic: {
-      uri: 'img/no-key.png',
+      uri: 'img/empty-key.png',
       alt: 'Slot for a Key Item',
       width: dW,
       height: dH
@@ -16,7 +16,7 @@ const keys = [
     type: 'boss',
     id: 'empty-boss',
     graphic: {
-      uri: 'img/no-boss.png',
+      uri: 'img/empty-boss.png',
       alt: 'Slot for a Boss',
       width: dW,
       height: dH
@@ -26,7 +26,7 @@ const keys = [
     type: 'character',
     id: 'empty-character',
     graphic: {
-      uri: 'img/no-character.png',
+      uri: 'img/empty-character.png',
       alt: 'Slot for a Character',
       width: dW,
       height: dH
@@ -45,16 +45,16 @@ const keys = [
       height: dH
     }
   },
-  {
-    type: 'key',
-    id: 'pass',
-    graphic: {
-      uri: 'img/keys/pass.png',
-      alt: 'Pass',
-      width: dW,
-      height: dH
-    }
-  },
+  // {
+  //   type: 'key',
+  //   id: 'pass',
+  //   graphic: {
+  //     uri: 'img/keys/pass.png',
+  //     alt: 'Pass',
+  //     width: dW,
+  //     height: dH
+  //   }
+  // },
   {
     type: 'key',
     id: 'hook',

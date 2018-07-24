@@ -101,7 +101,9 @@ const checkKeySpecial = (key, keyState, bossState, characterState) => {
     count.splice(0,0,...Object.keys(bossState).filter(k => bossState[k] === loc))
     count.splice(0,0,...Object.keys(characterState).filter(k => characterState[k] === loc))
     if (count.length >= num) {
-      return Object.assign(key, { graphic: config.specials[key.id].graphic })
+      return Object.assign(key, { graphic: config.specials[key.id].newgraphic })
+    } else {
+      return Object.assign(key, { graphic: config.specials[key.id].oldgraphic })
     }
   }
   return key
@@ -155,16 +157,19 @@ class App extends React.Component {
       return this.setKeyState(id, type, null)
     }
 
-
-    const count = config
+    const chain = config
       .locations.find(item => item.id === locationID)
       .chain.filter(x =>
         x.type === type &&
         (x.conditions ? checkConditions(x.conditions, this.state.keyState, this.state.bossState) : true)
-      ).length
+      )
 
-    if (keys.length < count) {
+    if (keys.length < chain.length) {
       return this.setKeyState(id, type, this.state.activeLocation)
+    }
+
+    if (chain.filter(c => c.conditions).length > 0) {
+      console.log('Conditions not met', chain)
     }
   }
 
@@ -246,9 +251,32 @@ class App extends React.Component {
           </div>
         </div>
         <div className="info">
-          <p>Selected: {activeLocation}</p>
-          <p>Tracker by narcodis</p>
-          <p>Suggestions/feedback: <a href="mailto:narcodis@gmail.com">narcodis@gmail.com</a></p>
+          <p>Selected: <b>{config.locations.find(loc => loc.id === activeLocation).graphic.alt}</b></p>
+          <p>
+            <a href="https://www.ff4-free-enterprise.com/" target="_blank" rel="noopener noreferrer">FFIV Free Enterprise</a> Location Tracker v0.1<br/>
+            By narcodis (narcodis#4559 on Discord)
+          </p>
+          <p>
+            Instructions: Select on a location (on the right), then click keys/bosses/characters to mark them at the selected location.
+            <br/>
+            Click on keys/bosses/characters that are already marked to unmark them.
+            <br/>
+            If a location/key is not unlocked, you will not be able to mark keys for that location.
+          </p>
+          <b><u>Key/Legend</u></b>
+          <table>
+            <tbody>
+            <tr>
+            <td><img src="img/empty-key.png" title="Slot for a Key" alt="key"/></td><td>Slot for a Key</td>
+            </tr>
+            <tr>
+            <td><img src="img/empty-boss.png" title="Slot for a Boss" alt="boss"/></td><td>Slot for a Boss</td>
+            </tr>
+            <tr>
+            <td><img src="img/empty-character.png" title="Slot for a Character" alt="character"/></td><td>Slot for a Character</td>
+            </tr>
+            </tbody>
+          </table>
         </div>
       </div>
     )

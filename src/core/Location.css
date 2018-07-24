@@ -4,18 +4,18 @@
     justify-content: left;
 
     height: 32px;
-    width: 280px;
+    width: 232px;
     padding: 2px;
 
     border: 2px;
-    border-color: #22a;
+    border-color: #010761;
     border-style: solid;
 
     cursor: pointer;
 }
 
 .Location:hover {
-    border-color: #aaa;
+    border-color: rgba(255,255,255,0.35);
 }
 
 .Location.selected {
@@ -38,9 +38,7 @@
 
 .divider {
     display: inline-block;
-    width: 1px;
-    background-color: #fff;
-    color: #fff;
+    width: 2px;
     padding: 0px;
-    margin: 0 8px;
+    margin: 0 4px;
 }

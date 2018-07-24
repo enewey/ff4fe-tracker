@@ -28,10 +28,10 @@
   justify-content: flex-start;
   flex-direction: column;
   flex-wrap: wrap;
-  height: 550px;
-  width: 600px;
-  border: 1px dotted black;
-  resize: both;
+  height: 480px;
+  width: 480px;
+  border-left: 2px solid white;
+  /* resize: both; */
   overflow: hidden;
 }
 
@@ -51,6 +51,6 @@ a:hover, a:active {
 }
 
 body {
-  background-color: #22a;
+  background-color: #010761;
   color: #fff;
 }
