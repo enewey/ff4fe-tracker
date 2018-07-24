@@ -254,7 +254,8 @@ class App extends React.Component {
           <p>Selected: <b>{config.locations.find(loc => loc.id === activeLocation).graphic.alt}</b></p>
           <p>
             <a href="https://www.ff4-free-enterprise.com/" target="_blank" rel="noopener noreferrer">FFIV Free Enterprise</a> Location Tracker v0.1<br/>
-            By narcodis (narcodis#4559 on Discord)
+            By narcodis (narcodis#4559 on Discord)<br/>
+            Icons provided by SchalaKitty
           </p>
           <p>
             Instructions: Select on a location (on the right), then click keys/bosses/characters to mark them at the selected location.
