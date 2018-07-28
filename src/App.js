@@ -4,56 +4,74 @@ import Key from './core/Key'
 import './App.css'
 import config from './config'
 
-// Extract properties from an object where set[prop] == value
-const extractProps = (value, set) => {
-  let ret = []
-  for (let prop in set) {
-    if (set.hasOwnProperty(prop)) {
-      if (set[prop] === value) {
-        ret.push(prop)
-      }
-    }
-  }
-  return ret
+const defaultState = {
+  appConfig: {
+    keys: true,
+    bosses: true,
+    characters: true
+  },
+
+  // State objects are maps of keyIDs to locationIDs
+  keyState: {},
+  bossState: {},
+  characterState: {},
+
+  locationState: {},
+  activeLocation: 'intro',
 }
 
-const calcLocationKeys = (locationID, keyState, bossState, characterState) => {
+const findKey = id => config.keys.find(k => k.id === id)
+// const findLocation = id => config.locations.find(k => k.id === id)
+const getKeyStateName = type => type + 'State'
 
-  // Get the right keys
-  const keys = extractProps(locationID, keyState)
-  const bosses = extractProps(locationID, bossState)
-  const characters = extractProps(locationID, characterState)
+const initLocationState = (keys, bosses, characters) => {
+  return config.locations.reduce((locations, next) => {
+    const array = next.chain.reduce((arr, chain) => {
+      switch (chain.type) {
+        case 'key':
+        return keys ? [ ...arr, findKey('empty-key') ] : arr
+        case 'boss':
+        return bosses ? [ ...arr, findKey('empty-boss') ] : arr
+        case 'character':
+        return characters ? [ ...arr, findKey('empty-character') ] : arr
+        default:
+        return arr
+      }
+    }, [])
+    
+    if (array.length > 0) {
+      let prop = {}
+      prop[next.id] = { ...next, keys: array }
+      return Object.assign(locations, prop)
+    }
+    return locations
+  }, {})
+}
 
-  // Get the chain for the location
-  const loc = config.locations.find(item => item.id === locationID)
+// keys and chain must be the same length
+const calcActiveKeys = (keys, chain, keyState, bossState) => {
+  let it = 0
+  return keys.map(k => {
+    while (k.type !== chain[it].type) { it++ }
+    const ret = { ...k, active: chain[it].conditions ? checkConditions(chain[it].conditions, keyState, bossState) : true }
+    it++
+    return ret
+  })
+}
 
-  if (loc.chain.length < keys.length + bosses.length + characters.length) {
-    console.log("WARNING: calculation of location keys availability + actual length mismatch")
+const calcLocationAvailability = (locationID, keyState, bossState) => {
+  const loc = config.locations.find(location => location.id === locationID)
+
+  for (let i = 0; i < loc.chain.length; i++) {
+    if (!loc.chain[i].conditions) {
+      return true
+    }
+    if (checkConditions(loc.chain[i].conditions, keyState, bossState)) {
+      return true
+    }
   }
 
-  let ret = loc.chain.map(c => {
-    let id
-    switch (c.type) {
-      case 'key':
-        id = keys.length > 0 ? keys.pop() : 'empty-key'
-        break
-      case 'boss':
-        id = bosses.length > 0 ? bosses.pop() : 'empty-boss'
-        break
-      case 'character':
-        id = characters.length > 0 ? characters.pop() : 'empty-character'
-        break
-      default:
-        id = 'empty-key'
-    }
-    return Object.assign(
-      { active: c.conditions ? checkConditions(c.conditions, keyState, bossState) : true }, 
-      config.keys.find(k => k.id === id)
-    )
-
-  })
-
-  return ret
+  return false
 }
 
 const checkConditions = (conditions, keyState, bossState) => {
@@ -77,21 +95,6 @@ const checkConditions = (conditions, keyState, bossState) => {
   return test
 }
 
-const calcLocationAvailability = (locationID, keyState, bossState) => {
-  const loc = config.locations.find(location => location.id === locationID)
-
-  for (let i = 0; i < loc.chain.length; i++) {
-    if (!loc.chain[i].conditions) {
-      return true
-    }
-    if (checkConditions(loc.chain[i].conditions, keyState, bossState)) {
-      return true
-    }
-  }
-
-  return false
-}
-
 const checkKeySpecial = (key, keyState, bossState, characterState) => {
   if (config.specials.hasOwnProperty(key.id)) {
     let loc = config.specials[key.id].condition.location
@@ -113,88 +116,79 @@ class App extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = defaultState
+    this.state = {
+      ...defaultState
+    }
 
-    this.onLocationSelect = this.onLocationSelect.bind(this)
-    this.onLocationKeySelect = this.onLocationKeySelect.bind(this)
-    this.onKeySelect = this.onKeySelect.bind(this)
+    this.state.locationState = initLocationState(
+      defaultState.appConfig.keys,
+      defaultState.appConfig.bosses,
+      defaultState.appConfig.characters)
+
   }
 
   // Function to handle clicks on a location
-  onLocationSelect = ev => {
-    console.log('Location selected', ev.currentTarget.id)
+  onLocationSelect = id => {
+    console.log('Location selected', id)
     this.setState({
-      activeLocation: ev.currentTarget.id
+      activeLocation: id
     })
   }
 
-  onLocationKeySelect = (id, type) => {
+  onLocationKeySelect = (id, type, slot) => {
     this.setKeyState(id, type, null)
+    this.setLocationState('empty-'+type, type, this.state.activeLocation, slot)
   }
 
   // Function to handle clicks on a key (add it to selected location)
   onKeySelect = (id, type) => {
+    const { locationState, activeLocation, keyState, bossState } = this.state
+    const { chain, keys } = locationState[activeLocation]
 
-    const locationID = this.state.activeLocation
-    let keys
-
-    switch (type) {
-      case 'key':
-        keys = extractProps(locationID, this.state.keyState)
-        break
-      case 'boss':
-        keys = extractProps(locationID, this.state.bossState)
-        break
-      case 'character':
-        keys = extractProps(locationID, this.state.characterState)
-        break
-      default:
-        keys = []
+    if (Boolean(keys.find((k, i) => {
+      if (k.id === id) {
+        this.setKeyState(id, type, null)
+        this.setLocationState('empty-'+type, type, activeLocation, i)
+        return true
+      }
+      return false
+    }))) {
+      return true
     }
 
-    // If key is already selected, deselect the key.
-    if (Boolean(keys.find(k => k === id))) {
-      return this.setKeyState(id, type, null)
-    }
-
-    const chain = config
-      .locations.find(item => item.id === locationID)
-      .chain.filter(x =>
-        x.type === type &&
-        (x.conditions ? checkConditions(x.conditions, this.state.keyState, this.state.bossState) : true)
-      )
-
-    if (keys.length < chain.length) {
-      return this.setKeyState(id, type, this.state.activeLocation)
-    }
-
-    if (chain.filter(c => c.conditions).length > 0) {
-      console.log('Conditions not met', chain)
+    for (let i=0; i<keys.length; i++) {
+      if (keys[i].type === type && keys[i].id.startsWith('empty')) {
+        if (chain[i].conditions ? checkConditions(chain[i].conditions, keyState, bossState) : true) {
+          this.setKeyState(id, type, activeLocation)
+          return this.setLocationState(id, type, activeLocation, i)
+        }
+      }
     }
   }
 
-  setKeyState = (id, type, state) => {
-    let base = {}
-    base[id] = state
+  setLocationState = (keyID, type, locID, slot) => {
+    let base = { ...this.state }
+    const keys = [ ...base.locationState[locID].keys ]
+    base.locationState[locID].keys = [ 
+      ...keys.slice(0, slot),
+      findKey(keyID ? keyID : 'empty-'+type),
+      ...keys.slice(slot+1, keys.length)
+    ]
 
-    switch (type) {
-      case 'key':
-        this.setState({ keyState: Object.assign(this.state.keyState, base) })
-        break
-      case 'boss':
-        this.setState({ bossState: Object.assign(this.state.bossState, base) })
-        break
-      case 'character':
-        this.setState({ characterState: Object.assign(this.state.characterState, base) })
-        break
-      default:
-        break
-    }
+    return this.setState(base)
+  }
+
+  setKeyState = (id, type, locID) => {
+    let base = { ...this.state }
+    base[getKeyStateName(type)][id] = locID
+
+    return this.setState(base)
   }
 
   render() {
 
-    const { keyState, bossState, characterState, activeLocation } = this.state
+    const { keyState, bossState, characterState, activeLocation, locationState } = this.state
+    console.log('Render state', this.state)
 
     const buildKeyRows = (type, kstate) => {
       let ret = []
@@ -240,7 +234,7 @@ class App extends React.Component {
                 <Location
                   id={loc.id}
                   key={loc.id}
-                  keys={calcLocationKeys(loc.id, keyState, bossState, characterState)}
+                  keys={calcActiveKeys(locationState[loc.id].keys, locationState[loc.id].chain, keyState, bossState)}
                   graphic={loc.graphic}
                   onSelect={this.onLocationSelect}
                   onKeySelect={this.onLocationKeySelect}
@@ -282,16 +276,6 @@ class App extends React.Component {
       </div>
     )
   }
-}
-
-const defaultState = {
-
-  // State objects are maps of keyIDs to locationIDs
-  keyState: {},
-  bossState: {},
-  characterState: {},
-
-  activeLocation: 'intro',
 }
 
 export default App

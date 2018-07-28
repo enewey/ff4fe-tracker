@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './Key.css'
 
-const Key = ({type, id, graphic, onSelect, active}) => (
-  <div id={id} className={`Key${(active ? ' active' : '')}`} onClick={() => onSelect ? onSelect(id,type) : {}}>
+const Key = ({type, id, graphic, onSelect, active, slot}) => (
+  <div id={id} className={`Key${(active ? ' active' : '')}`} onClick={() => onSelect ? onSelect(id,type,slot) : {}}>
     <img src={graphic.uri} alt={graphic.alt} title={graphic.alt} width={graphic.width} height={graphic.height} />
   </div>
 )
