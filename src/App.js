@@ -45,7 +45,7 @@ const calcActiveKeys = (loc, locState, keyState, bossState) => {
   const { keys, chain } = locState[loc]
 
   return keys.map((k, it) => {
-    const ret = { ...checkKeySpecial(k, locState), active: chain[it].conditions ? checkConditions(chain[it].conditions, keyState, bossState) : true }
+    const ret = { ...checkKeySpecial(k, locState), slot: it, active: chain[it].conditions ? checkConditions(chain[it].conditions, keyState, bossState) : true }
     return ret
   })
 }
@@ -263,7 +263,8 @@ class App extends React.Component {
                   <Location
                     id={loc}
                     key={loc}
-                    keys={calcActiveKeys(loc, locationState, keyState, bossState).filter(k => appConfig.includes(k.type))}
+                    keys={calcActiveKeys(loc, locationState, keyState, bossState)
+                      .filter(k => appConfig.includes(k.type))}
                     graphic={locationState[loc].graphic}
                     onSelect={this.onLocationSelect}
                     onKeySelect={this.onLocationKeySelect}

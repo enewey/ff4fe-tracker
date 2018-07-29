@@ -18,7 +18,7 @@ const Location = ({ id, keys, graphic, onSelect, onKeySelect, available, active 
                 title={graphic.alt} />
             <div className='divider' />
             {
-                keys.map((v, i) =>
+                keys.map((v,i) =>
                     <Key
                         key={`${v.id}-${i}`}
                         type={v.type}
@@ -27,7 +27,7 @@ const Location = ({ id, keys, graphic, onSelect, onKeySelect, available, active 
                         onSelect={
                             (kid, ktype, kslot) => onKeySelect(kid, ktype, kslot, id)
                         }
-                        slot={i}
+                        slot={v.slot}
                         active={Boolean(v.active)}
                     />)
             }
@@ -46,7 +46,9 @@ Location.propTypes = {
                 alt: PropTypes.string.isRequired,
                 width: PropTypes.number.isRequired,
                 height: PropTypes.number.isRequired
-            }).isRequired
+            }).isRequired,
+            active: PropTypes.bool,
+            slot: PropTypes.number
         })
     ),
     graphic: PropTypes.shape({
