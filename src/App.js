@@ -5,11 +5,11 @@ import './App.css'
 import config from './config'
 
 const defaultState = {
-  appConfig: {
-    keys: true,
-    bosses: true,
-    characters: true
-  },
+  appConfig: [
+    'key', 
+    'boss', 
+    'character'
+  ],
 
   // State objects are maps of keyIDs to locationIDs
   keyState: {}, // keyID: locID
@@ -24,20 +24,12 @@ const findKey = id => config.keys.find(k => k.id === id)
 // const findLocation = id => config.locations.find(k => k.id === id)
 const getKeyStateName = type => type + 'State'
 
-const initLocationState = (keys, bosses, characters) => {
+const locationFilter = (loc, appConfig) =>
+  loc.chain.reduce((ret, next) => ret || appConfig.includes(next.type), false)
+
+const initLocationState = appConfig => {
   return config.locations.reduce((locations, next) => {
-    const array = next.chain.reduce((arr, chain) => {
-      switch (chain.type) {
-        case 'key':
-          return keys ? [...arr, findKey('empty-key')] : arr
-        case 'boss':
-          return bosses ? [...arr, findKey('empty-boss')] : arr
-        case 'character':
-          return characters ? [...arr, findKey('empty-character')] : arr
-        default:
-          return arr
-      }
-    }, [])
+    const array = next.chain.map(ch => findKey('empty-' + ch.type))
 
     if (array.length > 0) {
       let prop = {}
@@ -97,9 +89,10 @@ const checkConditions = (conditions, keyState, bossState) => {
 const checkKeySpecial = (key, locationState) => {
   if (config.specials.hasOwnProperty(key.id)) {
     const num = config.specials[key.id].condition.num
-    const count = locationState[config.specials[key.id].condition.location].keys.reduce((acc, next) => {
+    const loc = locationState[config.specials[key.id].condition.location]
+    const count = loc ? loc.keys.reduce((acc, next) => {
       return acc + (next.id.startsWith('empty') ? 0 : 1)
-    }, 0)
+    }, 0) : 0
 
     if (count >= num) {
       return { ...key, graphic: config.specials[key.id].newgraphic }
@@ -118,11 +111,17 @@ class App extends React.Component {
       ...defaultState
     }
 
-    this.state.locationState = initLocationState(
-      defaultState.appConfig.keys,
-      defaultState.appConfig.bosses,
-      defaultState.appConfig.characters)
+    this.state.locationState = initLocationState(defaultState.appConfig)
 
+  }
+
+  onFilter = type => {
+    this.setState({
+      appConfig: 
+        this.state.appConfig.includes(type) ? 
+        this.state.appConfig.filter(c => c !== type) :
+        [ ...this.state.appConfig, type ]
+    })
   }
 
   // Function to handle clicks on a location
@@ -247,32 +246,46 @@ class App extends React.Component {
       <div className="container">
         <div className="App">
           <div className="keys-container">
-            {appConfig.keys && <div id="keys" className="key-section">
+            {appConfig.includes('key') && <div id="keys" className="key-section">
               {buildKeyRows('key', keyState)}
             </div>}
-            {appConfig.bosses && <div id="bosses" className="key-section">
+            {appConfig.includes('boss') && <div id="bosses" className="key-section">
               {buildKeyRows('boss', bossState)}
             </div>}
-            {appConfig.characters && <div id="characters" className="key-section no-border">
+            {appConfig.includes('character') && <div id="characters" className="key-section no-border">
               {buildKeyRows('character', characterState)}
             </div>}
           </div>
           <div id="locations">
             {
-              config.locations.map(loc =>
-                locationState.hasOwnProperty(loc.id) ?
+              Object.keys(locationState).map(loc =>
+                locationFilter(locationState[loc], appConfig) ?
                   <Location
-                    id={loc.id}
-                    key={loc.id}
-                    keys={calcActiveKeys(loc.id, locationState, keyState, bossState)}
-                    graphic={loc.graphic}
+                    id={loc}
+                    key={loc}
+                    keys={calcActiveKeys(loc, locationState, keyState, bossState).filter(k => appConfig.includes(k.type))}
+                    graphic={locationState[loc].graphic}
                     onSelect={this.onLocationSelect}
                     onKeySelect={this.onLocationKeySelect}
-                    available={calcLocationAvailability(loc.id, keyState, bossState)}
-                    active={activeLocation === loc.id}
-                  /> : false)
+                    available={calcLocationAvailability(loc, keyState, bossState)}
+                    active={activeLocation === loc}
+                  />
+                  : false)
             }
           </div>
+        </div>
+        <div className="options">
+          <p><u>Filter options</u></p>
+
+          <input id="key-filter" type="checkbox" checked={appConfig.includes('key')} onChange={() => this.onFilter('key')} />
+          <label htmlFor="key-filter">Keys</label><br />
+
+          <input id="boss-filter" type="checkbox" checked={appConfig.includes('boss')} onChange={() => this.onFilter('boss')}/>
+          <label htmlFor="boss-filter">Bosses</label><br />
+
+          <input id="char-filter" type="checkbox" checked={appConfig.includes('character')} onChange={() => this.onFilter('character')}/>
+          <label htmlFor="char-filter">Characters</label><br />
+
         </div>
         <div className="info">
           <p>Selected: <b>{config.locations.find(loc => loc.id === activeLocation).graphic.alt}</b></p>
