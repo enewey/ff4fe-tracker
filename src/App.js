@@ -12,11 +12,11 @@ const defaultState = {
   },
 
   // State objects are maps of keyIDs to locationIDs
-  keyState: {},
-  bossState: {},
-  characterState: {},
+  keyState: {}, // keyID: locID
+  bossState: {}, // keyID: locID
+  characterState: {}, // keyID : [ locID, ... ]
 
-  locationState: {},
+  locationState: {}, // locationID: { ...key }
   activeLocation: 'intro',
 }
 
@@ -49,12 +49,11 @@ const initLocationState = (keys, bosses, characters) => {
 }
 
 // keys and chain must be the same length
-const calcActiveKeys = (keys, chain, keyState, bossState) => {
-  let it = 0
-  return keys.map(k => {
-    while (k.type !== chain[it].type) { it++ }
-    const ret = { ...k, active: chain[it].conditions ? checkConditions(chain[it].conditions, keyState, bossState) : true }
-    it++
+const calcActiveKeys = (loc, locState, keyState, bossState) => {
+  const { keys, chain } = locState[loc]
+
+  return keys.map((k, it) => {
+    const ret = { ...checkKeySpecial(k, locState), active: chain[it].conditions ? checkConditions(chain[it].conditions, keyState, bossState) : true }
     return ret
   })
 }
@@ -95,18 +94,17 @@ const checkConditions = (conditions, keyState, bossState) => {
   return test
 }
 
-const checkKeySpecial = (key, keyState, bossState, characterState) => {
+const checkKeySpecial = (key, locationState) => {
   if (config.specials.hasOwnProperty(key.id)) {
-    let loc = config.specials[key.id].condition.location
-    let num = config.specials[key.id].condition.num
-    let count = []
-    count.splice(0,0,...Object.keys(keyState).filter(k => keyState[k] === loc))
-    count.splice(0,0,...Object.keys(bossState).filter(k => bossState[k] === loc))
-    count.splice(0,0,...Object.keys(characterState).filter(k => characterState[k] === loc))
-    if (count.length >= num) {
-      return Object.assign(key, { graphic: config.specials[key.id].newgraphic })
+    const num = config.specials[key.id].condition.num
+    const count = locationState[config.specials[key.id].condition.location].keys.reduce((acc, next) => {
+      return acc + (next.id.startsWith('empty') ? 0 : 1)
+    }, 0)
+    
+    if (count >= num) {
+      return { ...key, graphic: config.specials[key.id].newgraphic }
     } else {
-      return Object.assign(key, { graphic: config.specials[key.id].oldgraphic })
+      return { ...key, graphic: config.specials[key.id].oldgraphic }
     }
   }
   return key
@@ -135,9 +133,13 @@ class App extends React.Component {
     })
   }
 
-  onLocationKeySelect = (id, type, slot) => {
-    this.setKeyState(id, type, null)
-    this.setLocationState('empty-'+type, type, this.state.activeLocation, slot)
+  onLocationKeySelect = (id, type, slot, locID) => {
+    // if an empty slot was clicked, ignore it.
+    if (id.startsWith('empty')) {
+      return true
+    }
+
+    return this.unsetKey(id, type, locID, slot)
   }
 
   // Function to handle clicks on a key (add it to selected location)
@@ -145,25 +147,52 @@ class App extends React.Component {
     const { locationState, activeLocation, keyState, bossState } = this.state
     const { chain, keys } = locationState[activeLocation]
 
-    if (Boolean(keys.find((k, i) => {
-      if (k.id === id) {
-        this.setKeyState(id, type, null)
-        this.setLocationState('empty-'+type, type, activeLocation, i)
-        return true
-      }
-      return false
-    }))) {
-      return true
+    // if key exists somewhere already, unset it
+    const keyloc = this.state[getKeyStateName(type)][id]
+    if (type !== 'character' && keyloc) {
+      const slot = locationState[keyloc].keys.findIndex(k => k.id === id)
+      return this.unsetKey(id, type, keyloc, slot)
+    } else if (keyloc && keyloc.length > 0 && keyloc.find(loc => loc === activeLocation)) {
+      const index = keyloc.findIndex(loc => loc === activeLocation)
+      const slot = locationState[keyloc[index]].keys.findIndex(k => k.id === id)
+      return this.unsetKey(id, type, keyloc[index], slot)
     }
 
     for (let i=0; i<keys.length; i++) {
       if (keys[i].type === type && keys[i].id.startsWith('empty')) {
         if (chain[i].conditions ? checkConditions(chain[i].conditions, keyState, bossState) : true) {
-          this.setKeyState(id, type, activeLocation)
-          return this.setLocationState(id, type, activeLocation, i)
+          return this.setKey(id, type, activeLocation, i)
+          // this.setKeyState(id, type, activeLocation)
+          // return this.setLocationState(id, type, activeLocation, i)
         }
       }
     }
+  }
+
+  setKey = (keyID, type, locID, slot) => {
+    const kstate = this.state[getKeyStateName(type)]
+
+    if (type === 'character') {
+      const locs = kstate[keyID] || []
+      this.setKeyState(keyID, type, [ ...locs, locID ] )
+    } else {
+      if (kstate[keyID]) { this.setLocationState('empty-'+type, type, kstate[keyID], slot) }
+      this.setKeyState(keyID, type, locID)
+    }
+    
+    return this.setLocationState(keyID, type, locID, slot)
+  }
+
+  unsetKey = (keyID, type, locID, slot) => {
+    const kstate = this.state[getKeyStateName(type)]
+
+    if (type === 'character') { // if it's a character, pop off the last item of the array
+      const locs = kstate[keyID] || []
+      this.setKeyState(keyID, type, locs.filter(loc => loc !== locID))
+    } else {
+      this.setKeyState(keyID, type, null)
+    }
+    return this.setLocationState('empty-'+type, type, locID, slot)
   }
 
   setLocationState = (keyID, type, locID, slot) => {
@@ -178,9 +207,9 @@ class App extends React.Component {
     return this.setState(base)
   }
 
-  setKeyState = (id, type, locID) => {
+  setKeyState = (id, type, loc) => {
     let base = { ...this.state }
-    base[getKeyStateName(type)][id] = locID
+    base[getKeyStateName(type)][id] = loc
 
     return this.setState(base)
   }
@@ -196,14 +225,14 @@ class App extends React.Component {
       let keys = config.keys.filter(key => key.type === type && !key.id.startsWith('empty-'))
 
       for (let i = 0; i < keys.length; i++) {
-        const key = checkKeySpecial(keys[i], keyState, bossState, characterState)
+        const key = checkKeySpecial(keys[i], locationState)
         innerRet.push(<Key
           id={key.id}
           key={key.id}
           type={key.type}
           graphic={key.graphic}
           onSelect={this.onKeySelect}
-          active={Boolean(kstate[key.id])}
+          active={Array.isArray(kstate[key.id]) ? kstate[key.id].length > 0 : Boolean(kstate[key.id])}
         />)
         if (i % 6 === 5 || i === keys.length - 1) {
           ret.push(<div key={i} className="key-row">{innerRet}</div>)
@@ -234,7 +263,7 @@ class App extends React.Component {
                 <Location
                   id={loc.id}
                   key={loc.id}
-                  keys={calcActiveKeys(locationState[loc.id].keys, locationState[loc.id].chain, keyState, bossState)}
+                  keys={calcActiveKeys(loc.id, locationState, keyState, bossState)}
                   graphic={loc.graphic}
                   onSelect={this.onLocationSelect}
                   onKeySelect={this.onLocationKeySelect}
@@ -247,7 +276,7 @@ class App extends React.Component {
         <div className="info">
           <p>Selected: <b>{config.locations.find(loc => loc.id === activeLocation).graphic.alt}</b></p>
           <p>
-            <a href="https://www.ff4-free-enterprise.com/" target="_blank" rel="noopener noreferrer">FFIV Free Enterprise</a> Location Tracker v0.1<br/>
+            <a href="https://www.ff4-free-enterprise.com/" target="_blank" rel="noopener noreferrer">FFIV Free Enterprise</a> Location Tracker v0.1 ... <a href="https://github.com/enewey/ff4fe-tracker" target="_blank" rel="noopener noreferrer">View on Github</a><br/>
             By narcodis (narcodis#4559 on Discord)<br/>
             Icons provided by SchalaKitty
           </p>
