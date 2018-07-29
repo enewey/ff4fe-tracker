@@ -29,16 +29,16 @@ const initLocationState = (keys, bosses, characters) => {
     const array = next.chain.reduce((arr, chain) => {
       switch (chain.type) {
         case 'key':
-        return keys ? [ ...arr, findKey('empty-key') ] : arr
+          return keys ? [...arr, findKey('empty-key')] : arr
         case 'boss':
-        return bosses ? [ ...arr, findKey('empty-boss') ] : arr
+          return bosses ? [...arr, findKey('empty-boss')] : arr
         case 'character':
-        return characters ? [ ...arr, findKey('empty-character') ] : arr
+          return characters ? [...arr, findKey('empty-character')] : arr
         default:
-        return arr
+          return arr
       }
     }, [])
-    
+
     if (array.length > 0) {
       let prop = {}
       prop[next.id] = { ...next, keys: array }
@@ -100,7 +100,7 @@ const checkKeySpecial = (key, locationState) => {
     const count = locationState[config.specials[key.id].condition.location].keys.reduce((acc, next) => {
       return acc + (next.id.startsWith('empty') ? 0 : 1)
     }, 0)
-    
+
     if (count >= num) {
       return { ...key, graphic: config.specials[key.id].newgraphic }
     } else {
@@ -158,7 +158,7 @@ class App extends React.Component {
       return this.unsetKey(id, type, keyloc[index], slot)
     }
 
-    for (let i=0; i<keys.length; i++) {
+    for (let i = 0; i < keys.length; i++) {
       if (keys[i].type === type && keys[i].id.startsWith('empty')) {
         if (chain[i].conditions ? checkConditions(chain[i].conditions, keyState, bossState) : true) {
           return this.setKey(id, type, activeLocation, i)
@@ -174,12 +174,12 @@ class App extends React.Component {
 
     if (type === 'character') {
       const locs = kstate[keyID] || []
-      this.setKeyState(keyID, type, [ ...locs, locID ] )
+      this.setKeyState(keyID, type, [...locs, locID])
     } else {
-      if (kstate[keyID]) { this.setLocationState('empty-'+type, type, kstate[keyID], slot) }
+      if (kstate[keyID]) { this.setLocationState('empty-' + type, type, kstate[keyID], slot) }
       this.setKeyState(keyID, type, locID)
     }
-    
+
     return this.setLocationState(keyID, type, locID, slot)
   }
 
@@ -192,16 +192,16 @@ class App extends React.Component {
     } else {
       this.setKeyState(keyID, type, null)
     }
-    return this.setLocationState('empty-'+type, type, locID, slot)
+    return this.setLocationState('empty-' + type, type, locID, slot)
   }
 
   setLocationState = (keyID, type, locID, slot) => {
     let base = { ...this.state }
-    const keys = [ ...base.locationState[locID].keys ]
-    base.locationState[locID].keys = [ 
+    const keys = [...base.locationState[locID].keys]
+    base.locationState[locID].keys = [
       ...keys.slice(0, slot),
-      findKey(keyID ? keyID : 'empty-'+type),
-      ...keys.slice(slot+1, keys.length)
+      findKey(keyID ? keyID : 'empty-' + type),
+      ...keys.slice(slot + 1, keys.length)
     ]
 
     return this.setState(base)
@@ -216,7 +216,7 @@ class App extends React.Component {
 
   render() {
 
-    const { keyState, bossState, characterState, activeLocation, locationState } = this.state
+    const { keyState, bossState, characterState, activeLocation, locationState, appConfig } = this.state
     console.log('Render state', this.state)
 
     const buildKeyRows = (type, kstate) => {
@@ -247,58 +247,59 @@ class App extends React.Component {
       <div className="container">
         <div className="App">
           <div className="keys-container">
-            <div id="keys" className="key-section">
+            {appConfig.keys && <div id="keys" className="key-section">
               {buildKeyRows('key', keyState)}
-            </div>
-            <div id="bosses" className="key-section">
+            </div>}
+            {appConfig.bosses && <div id="bosses" className="key-section">
               {buildKeyRows('boss', bossState)}
-            </div>
-            <div id="characters" className="key-section no-border">
+            </div>}
+            {appConfig.characters && <div id="characters" className="key-section no-border">
               {buildKeyRows('character', characterState)}
-            </div>
+            </div>}
           </div>
           <div id="locations">
             {
               config.locations.map(loc =>
-                <Location
-                  id={loc.id}
-                  key={loc.id}
-                  keys={calcActiveKeys(loc.id, locationState, keyState, bossState)}
-                  graphic={loc.graphic}
-                  onSelect={this.onLocationSelect}
-                  onKeySelect={this.onLocationKeySelect}
-                  available={calcLocationAvailability(loc.id, keyState, bossState)}
-                  active={activeLocation === loc.id}
-                />)
+                locationState.hasOwnProperty(loc.id) ?
+                  <Location
+                    id={loc.id}
+                    key={loc.id}
+                    keys={calcActiveKeys(loc.id, locationState, keyState, bossState)}
+                    graphic={loc.graphic}
+                    onSelect={this.onLocationSelect}
+                    onKeySelect={this.onLocationKeySelect}
+                    available={calcLocationAvailability(loc.id, keyState, bossState)}
+                    active={activeLocation === loc.id}
+                  /> : false)
             }
           </div>
         </div>
         <div className="info">
           <p>Selected: <b>{config.locations.find(loc => loc.id === activeLocation).graphic.alt}</b></p>
           <p>
-            <a href="https://www.ff4-free-enterprise.com/" target="_blank" rel="noopener noreferrer">FFIV Free Enterprise</a> Location Tracker v0.1 ... <a href="https://github.com/enewey/ff4fe-tracker" target="_blank" rel="noopener noreferrer">View on Github</a><br/>
-            By narcodis (narcodis#4559 on Discord)<br/>
+            <a href="https://www.ff4-free-enterprise.com/" target="_blank" rel="noopener noreferrer">FFIV Free Enterprise</a> Location Tracker v0.1 ... <a href="https://github.com/enewey/ff4fe-tracker" target="_blank" rel="noopener noreferrer">View on Github</a><br />
+            By narcodis (narcodis#4559 on Discord)<br />
             Icons provided by SchalaKitty
           </p>
           <p>
             Instructions: Select on a location (on the right), then click keys/bosses/characters to mark them at the selected location.
-            <br/>
+            <br />
             Click on keys/bosses/characters that are already marked to unmark them.
-            <br/>
+            <br />
             If a location/key is not unlocked, you will not be able to mark keys for that location.
           </p>
           <b><u>Key/Legend</u></b>
           <table>
             <tbody>
-            <tr>
-            <td><img src="img/empty-key.png" title="Slot for a Key" alt="key"/></td><td>Slot for a Key</td>
-            </tr>
-            <tr>
-            <td><img src="img/empty-boss.png" title="Slot for a Boss" alt="boss"/></td><td>Slot for a Boss</td>
-            </tr>
-            <tr>
-            <td><img src="img/empty-character.png" title="Slot for a Character" alt="character"/></td><td>Slot for a Character</td>
-            </tr>
+              <tr>
+                <td><img src="img/empty-key.png" title="Slot for a Key" alt="key" /></td><td>Slot for a Key</td>
+              </tr>
+              <tr>
+                <td><img src="img/empty-boss.png" title="Slot for a Boss" alt="boss" /></td><td>Slot for a Boss</td>
+              </tr>
+              <tr>
+                <td><img src="img/empty-character.png" title="Slot for a Character" alt="character" /></td><td>Slot for a Character</td>
+              </tr>
             </tbody>
           </table>
         </div>
