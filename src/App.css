@@ -48,7 +48,8 @@
   height: 480px;
   width: 480px;
   
-  /* resize: both; */
+  resize: both;
+  border: 1px solid black;
   overflow: hidden;
 }
 

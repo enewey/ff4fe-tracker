@@ -301,14 +301,14 @@ class App extends React.Component {
         <div className="options">
           <p><u>Filter options</u></p>
 
-          <input id="key-filter" type="checkbox" checked={appConfig.includes('key')} onChange={() => this.onFilter('key')} />
-          <label htmlFor="key-filter">Keys</label> ...
+          {/* <input id="key-filter" type="checkbox" checked={appConfig.includes('key')} onChange={() => this.onFilter('key')} />
+          <label htmlFor="key-filter">Keys</label> ... */}
 
           <input id="boss-filter" type="checkbox" checked={appConfig.includes('boss')} onChange={() => this.onFilter('boss')}/>
           <label htmlFor="boss-filter">Bosses</label> ...
 
           <input id="char-filter" type="checkbox" checked={appConfig.includes('character')} onChange={() => this.onFilter('character')}/>
-          <label htmlFor="char-filter">Characters</label> ...
+          <label htmlFor="char-filter">Characters</label>
 
         </div>
         <div className="info">
