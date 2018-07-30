@@ -12,11 +12,11 @@ const defaultState = {
   ],
 
   // State objects are maps of keyIDs to locationIDs
-  keyState: {}, // keyID: locID
-  bossState: {}, // keyID: locID
-  characterState: {}, // keyID : [ locID, ... ]
+  keyState: {}, // { keyID: locID, ... }
+  bossState: {}, // { keyID: locID, ... }
+  characterState: {}, // { keyID : [ locID, ... ], ... }
 
-  locationState: {}, // locationID: { ...key }
+  locationState: {}, // { locationID: { ...key }, ... }
   activeLocation: 'intro',
 }
 
@@ -24,9 +24,11 @@ const findKey = id => config.keys.find(k => k.id === id)
 // const findLocation = id => config.locations.find(k => k.id === id)
 const getKeyStateName = type => type + 'State'
 
+// Helper for determining which locations to render based on filters
 const locationFilter = (loc, appConfig) =>
   loc.chain.reduce((ret, next) => ret || appConfig.includes(next.type), false)
 
+// Initializes the state of locations by populating with empty keys
 const initLocationState = appConfig => {
   return config.locations.reduce((locations, next) => {
     const array = next.chain.map(ch => findKey('empty-' + ch.type))
@@ -40,16 +42,21 @@ const initLocationState = appConfig => {
   }, {})
 }
 
-// keys and chain must be the same length
+// Calculate each key's active state from a location's key array
+// Returns an array of key objects
 const calcActiveKeys = (loc, locState, keyState, bossState) => {
+  // keys and chain must be the same length
   const { keys, chain } = locState[loc]
 
-  return keys.map((k, it) => {
-    const ret = { ...checkKeySpecial(k, locState), slot: it, active: chain[it].conditions ? checkConditions(chain[it].conditions, keyState, bossState) : true }
-    return ret
-  })
+  return keys.map((k, it) => ({ 
+    ...checkKeySpecial(k, locState), 
+    slot: it, // also include the slot number
+    active: chain[it].conditions ? checkConditions(chain[it].conditions, keyState, bossState) : true 
+  }))
 }
 
+// Used to determine if a location should be highlighted and useable.
+// Returns a boolean value
 const calcLocationAvailability = (locationID, keyState, bossState) => {
   const loc = config.locations.find(location => location.id === locationID)
 
@@ -65,11 +72,17 @@ const calcLocationAvailability = (locationID, keyState, bossState) => {
   return false
 }
 
+// Check the conditions of an event chain within the location config
 const checkConditions = (conditions, keyState, bossState) => {
   let test = true;
+
+  // each element in the conditions array is a single condition,
+  // and each condition in the array must logically AND to pass
   for (let i = 0; i < conditions.length; i++) {
     const cond = conditions[i]
     if (Array.isArray(cond)) {
+      // a sub-array denotes a pair of "or" conditions
+      // e.g. [ 'hook', 'magma' ] == hook OR magma
       test = test &&
         (
           (Boolean(keyState[cond[0]]) || Boolean(keyState[cond[1]])) ||
@@ -86,6 +99,9 @@ const checkConditions = (conditions, keyState, bossState) => {
   return test
 }
 
+// Pass in a key and check if it meets the conditions of the "special"
+// Used to handle Cecil turning into a paladin after ordeals is done,
+// and Rydia growing up after dwarf castle is done.
 const checkKeySpecial = (key, locationState) => {
   if (config.specials.hasOwnProperty(key.id)) {
     const num = config.specials[key.id].condition.num
@@ -115,6 +131,7 @@ class App extends React.Component {
 
   }
 
+  // Handle a change in filter options
   onFilter = type => {
     this.setState({
       appConfig: 
@@ -146,28 +163,31 @@ class App extends React.Component {
     const { locationState, activeLocation, keyState, bossState } = this.state
     const { chain, keys } = locationState[activeLocation]
 
-    // if key exists somewhere already, unset it
     const keyloc = this.state[getKeyStateName(type)][id]
     if (type !== 'character' && keyloc) {
+      // bosses and keys will be a string designating their location
+      // if key or boss exists somewhere already, unset it
       const slot = locationState[keyloc].keys.findIndex(k => k.id === id)
       return this.unsetKey(id, type, keyloc, slot)
     } else if (keyloc && keyloc.length > 0 && keyloc.find(loc => loc === activeLocation)) {
+      // characters will be an array of locations
+      // unset it only if it is already at the active location
       const index = keyloc.findIndex(loc => loc === activeLocation)
       const slot = locationState[keyloc[index]].keys.findIndex(k => k.id === id)
       return this.unsetKey(id, type, keyloc[index], slot)
     }
 
+    // set the key if there is room at this location
     for (let i = 0; i < keys.length; i++) {
       if (keys[i].type === type && keys[i].id.startsWith('empty')) {
         if (chain[i].conditions ? checkConditions(chain[i].conditions, keyState, bossState) : true) {
           return this.setKey(id, type, activeLocation, i)
-          // this.setKeyState(id, type, activeLocation)
-          // return this.setLocationState(id, type, activeLocation, i)
         }
       }
     }
   }
 
+  // helper method to encapsulate setting a key
   setKey = (keyID, type, locID, slot) => {
     const kstate = this.state[getKeyStateName(type)]
 
@@ -182,6 +202,7 @@ class App extends React.Component {
     return this.setLocationState(keyID, type, locID, slot)
   }
 
+  // helper method to encapsulate unsetting a key
   unsetKey = (keyID, type, locID, slot) => {
     const kstate = this.state[getKeyStateName(type)]
 
@@ -194,6 +215,7 @@ class App extends React.Component {
     return this.setLocationState('empty-' + type, type, locID, slot)
   }
 
+  // updates the state of locations
   setLocationState = (keyID, type, locID, slot) => {
     let base = { ...this.state }
     const keys = [...base.locationState[locID].keys]
@@ -206,6 +228,7 @@ class App extends React.Component {
     return this.setState(base)
   }
 
+  // updates the state of keys
   setKeyState = (id, type, loc) => {
     let base = { ...this.state }
     base[getKeyStateName(type)][id] = loc
@@ -249,14 +272,14 @@ class App extends React.Component {
             {appConfig.includes('key') && <div id="keys" className="key-section">
               {buildKeyRows('key', keyState)}
             </div>}
-            {appConfig.includes('boss') && <div id="bosses" className="key-section">
-              {buildKeyRows('boss', bossState)}
-            </div>}
-            {appConfig.includes('character') && <div id="characters" className="key-section no-border">
+            {appConfig.includes('character') && <div id="characters" className="char-section">
               {buildKeyRows('character', characterState)}
             </div>}
+            {appConfig.includes('boss') && <div id="bosses" className="boss-section no-border">
+              {buildKeyRows('boss', bossState)}
+            </div>}
           </div>
-          <div id="locations">
+          <div className="location-container">
             {
               Object.keys(locationState).map(loc =>
                 locationFilter(locationState[loc], appConfig) ?
@@ -279,13 +302,13 @@ class App extends React.Component {
           <p><u>Filter options</u></p>
 
           <input id="key-filter" type="checkbox" checked={appConfig.includes('key')} onChange={() => this.onFilter('key')} />
-          <label htmlFor="key-filter">Keys</label><br />
+          <label htmlFor="key-filter">Keys</label> ...
 
           <input id="boss-filter" type="checkbox" checked={appConfig.includes('boss')} onChange={() => this.onFilter('boss')}/>
-          <label htmlFor="boss-filter">Bosses</label><br />
+          <label htmlFor="boss-filter">Bosses</label> ...
 
           <input id="char-filter" type="checkbox" checked={appConfig.includes('character')} onChange={() => this.onFilter('character')}/>
-          <label htmlFor="char-filter">Characters</label><br />
+          <label htmlFor="char-filter">Characters</label> ...
 
         </div>
         <div className="info">

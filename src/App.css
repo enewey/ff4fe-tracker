@@ -1,36 +1,53 @@
 .App {
   /* position: absolute; */
 
-  width: 100%;
-
   display: flex;
+  flex-direction: column;
   flex-wrap: nowrap;
 }
 
 .keys-container {
   display: inline-flex;
-  flex-direction: column;
+  width: 400px;
+  flex-direction: row;
+  border-bottom: 2px solid white;
+}
+
+.boss-section {
+  margin: 0 0 0 0;
+  padding: 2px 0;
+  height: 216px;
+  border-right: 2px solid #fff;
+}
+
+.char-section {
+  margin: 0 0 0 0;
+  padding: 2px 0;
+  width: 72px;
+  height: 216px;
+  border-right: 2px solid #fff;
 }
 
 .key-section {
   margin: 0 0 0 0;
   padding: 2px 0;
-  width: 216px;
-  border-bottom: 2px solid #fff;
+  width: 108px;
+  height: 216px;
+  border-right: 2px solid #fff;
 }
 
 .no-border {
   border: none;
 }
 
-#locations {
-  display: inline-flex;
+.location-container {
+  display: flex;
   justify-content: flex-start;
   flex-direction: column;
   flex-wrap: wrap;
   height: 480px;
   width: 480px;
-  border-left: 2px solid white;
+  
   /* resize: both; */
   overflow: hidden;
 }
