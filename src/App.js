@@ -316,7 +316,8 @@ class App extends React.Component {
           <p>
             <a href="https://www.ff4-free-enterprise.com/" target="_blank" rel="noopener noreferrer">FFIV Free Enterprise</a> Location Tracker v0.1 ... <a href="https://github.com/enewey/ff4fe-tracker" target="_blank" rel="noopener noreferrer">View on Github</a><br />
             By narcodis (narcodis#4559 on Discord)<br />
-            Icons provided by SchalaKitty
+            Icons provided by SchalaKitty<br />
+            Additional contributions by konkers
           </p>
           <p>
             Instructions: Select on a location (on the right), then click keys/bosses/characters to mark them at the selected location.
