@@ -19,6 +19,43 @@ const locations = [
     }
   },
   {
+    id: 'damcyan',
+    chain: [
+      { type: 'character' }
+    ],
+    graphic: {
+      uri: 'img/locations/damcyan.png',
+      alt: 'Damcyan Castle',
+      width: dW,
+      height: dH
+    }
+  },
+  {
+    id: 'mysidia',
+    chain: [
+      { type: 'character' },
+      { type: 'character' }
+    ],
+    graphic: {
+      uri: 'img/locations/mysidia.png',
+      alt: 'Mysidia',
+      width: dW,
+      height: dH
+    }
+  },
+  {
+    id: 'tororia',
+    chain: [
+      { type: 'key' }
+    ],
+    graphic: {
+      uri: 'img/locations/tororia.png',
+      alt: 'Tororia Castle',
+      width: dW,
+      height: dH
+    }
+  },
+  {
     id: 'adamant-grotto',
     chain: [
       { type: 'key', conditions: ['hook', 'rat'] },
