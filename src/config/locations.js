@@ -97,6 +97,7 @@ const locations = [
   {
     id: 'watery',
     chain: [
+      { type: 'character'},
       { type: 'boss' }
     ],
     graphic: {
@@ -217,6 +218,7 @@ const locations = [
   {
     id: 'ordeals',
     chain: [
+      { type: 'character' },
       { type: 'boss' },
       { type: 'boss' },
       { type: 'key' },
