@@ -123,12 +123,30 @@ class App extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
+    this.state = this.getDefaultState()
+
+    const savedState = JSON.parse(localStorage.getItem('state'))
+    if (!savedState) {
+      return
+    }
+
+    this.state = Object.assign({}, this.state, savedState)
+  }
+
+  getDefaultState = () => {
+    let state = {
       ...defaultState
     }
 
-    this.state.locationState = initLocationState(defaultState.appConfig)
+    state.locationState = initLocationState(defaultState.appConfig)
+    return state
+  }
 
+  onReset = () => {
+    let state = this.getDefaultState()
+    this.saveState(state)
+
+    return this.setState(state)
   }
 
   // Handle a change in filter options
@@ -225,6 +243,8 @@ class App extends React.Component {
       ...keys.slice(slot + 1, keys.length)
     ]
 
+    this.saveState(base)
+
     return this.setState(base)
   }
 
@@ -233,7 +253,21 @@ class App extends React.Component {
     let base = { ...this.state }
     base[getKeyStateName(type)][id] = loc
 
+    this.saveState(base)
+
     return this.setState(base)
+  }
+
+  saveState = (state) => {
+    let base = { ...state }
+    let data = {
+      'keyState': base.keyState,
+      'bossState': base.bossState,
+      'characterState': base.characterState,
+      'locationState': base.locationState
+    } 
+    console.log(data)
+    localStorage.setItem('state', JSON.stringify(data))
   }
 
   render() {
@@ -297,6 +331,11 @@ class App extends React.Component {
                   : false)
             }
           </div>
+        </div>
+        <div className="actions">
+          <button onClick={() => this.onReset()}>
+            Reset Tracker
+          </button>
         </div>
         <div className="options">
           <p><u>Filter options</u></p>
