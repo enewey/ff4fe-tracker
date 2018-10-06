@@ -31,7 +31,14 @@ const locationFilter = (loc, appConfig) =>
 // Initializes the state of locations by populating with empty keys
 const initLocationState = appConfig => {
   return config.locations.reduce((locations, next) => {
-    const array = next.chain.map(ch => findKey('empty-' + ch.type))
+    const array = next.chain.map(ch => {
+      let key = findKey('empty-' + ch.type)
+      if ('note' in ch) {
+        // We need to clone the key so that the notes say unique per instance.
+        return Object.assign({}, key, {note: ch.note})
+      }
+      return key
+    })
 
     if (array.length > 0) {
       let prop = {}
