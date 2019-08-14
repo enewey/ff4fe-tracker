@@ -4,7 +4,7 @@ import Key from './core/Key'
 import './App.css'
 import config from './config'
 
-const defaultState = {
+const defaultState = () => ({
   appConfig: [
     'key', 
     'boss', 
@@ -18,7 +18,7 @@ const defaultState = {
 
   locationState: {}, // { locationID: { ...key }, ... }
   activeLocation: 'intro',
-}
+})
 
 const findKey = id => config.keys.find(k => k.id === id)
 // const findLocation = id => config.locations.find(k => k.id === id)
@@ -29,14 +29,14 @@ const locationFilter = (loc, appConfig) =>
   loc.chain.reduce((ret, next) => ret || appConfig.includes(next.type), false)
 
 // Initializes the state of locations by populating with empty keys
-const initLocationState = appConfig => {
+const initLocationState = () => {
   return config.locations.reduce((locations, next) => {
     const array = next.chain.map(ch => findKey('empty-' + ch.type))
 
     if (array.length > 0) {
       let prop = {}
       prop[next.id] = { ...next, keys: array }
-      return Object.assign(locations, prop)
+      return Object.assign({}, locations, prop)
     }
     return locations
   }, {})
@@ -126,25 +126,23 @@ class App extends React.Component {
     this.state = this.getDefaultState()
 
     const savedState = JSON.parse(localStorage.getItem('state'))
-    if (!savedState) {
-      return
+    if (savedState) {
+      this.state = Object.assign({}, this.state, savedState)
     }
-
-    this.state = Object.assign({}, this.state, savedState)
   }
 
   getDefaultState = () => {
     let state = {
-      ...defaultState
+      ...defaultState()
     }
 
-    state.locationState = initLocationState(defaultState.appConfig)
+    state.locationState = initLocationState(state.appConfig)
     return state
   }
 
   onReset = () => {
     let state = this.getDefaultState()
-    this.saveState(state)
+    localStorage.removeItem('state')
 
     return this.setState(state)
   }
@@ -161,7 +159,6 @@ class App extends React.Component {
 
   // Function to handle clicks on a location
   onLocationSelect = id => {
-    console.log('Location selected', id)
     this.setState({
       activeLocation: id
     })
@@ -266,14 +263,12 @@ class App extends React.Component {
       'characterState': base.characterState,
       'locationState': base.locationState
     } 
-    console.log(data)
     localStorage.setItem('state', JSON.stringify(data))
   }
 
   render() {
 
     const { keyState, bossState, characterState, activeLocation, locationState, appConfig } = this.state
-    console.log('Render state', this.state)
 
     const buildKeyRows = (type, kstate) => {
       let ret = []

@@ -45,16 +45,16 @@ const keys = [
       height: dH
     }
   },
-  // {
-  //   type: 'key',
-  //   id: 'pass',
-  //   graphic: {
-  //     uri: 'img/keys/pass.png',
-  //     alt: 'Pass',
-  //     width: dW,
-  //     height: dH
-  //   }
-  // },
+  {
+    type: 'key',
+    id: 'pass',
+    graphic: {
+      uri: 'img/keys/pass.png',
+      alt: 'Pass',
+      width: dW,
+      height: dH
+    }
+  },
   {
     type: 'key',
     id: 'hook',
