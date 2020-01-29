@@ -2,15 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import './Key.css'
 
-const Key = ({ type, id, graphic, onSelect, active, slot }) => (
+const Key = ({ type, id, note, graphic, onSelect, active, slot }) => (
   <div
     id={id}
     className={`Key${(active ? ' active' : '')}`}
     onClick={() => onSelect ? onSelect(id, type, slot) : {}}>
+    {console.log(note)}
     <img
       src={graphic.uri}
-      alt={graphic.alt}
-      title={graphic.alt}
+      alt={note ? note : graphic.alt}
+      title={note ? note : graphic.alt}
       width={graphic.width}
       height={graphic.height} />
   </div>
@@ -19,6 +20,7 @@ const Key = ({ type, id, graphic, onSelect, active, slot }) => (
 Key.propTypes = {
   type: PropTypes.oneOf(['key', 'boss', 'character']).isRequired,
   id: PropTypes.string.isRequired,
+  note: PropTypes.string,
   graphic: PropTypes.shape({
     uri: PropTypes.string.isRequired,
     alt: PropTypes.string.isRequired,

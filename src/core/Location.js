@@ -23,6 +23,7 @@ const Location = ({ id, keys, graphic, onSelect, onKeySelect, available, active 
                         key={`${v.id}-${i}`}
                         type={v.type}
                         id={v.id}
+                        note={v.note}
                         graphic={v.graphic}
                         onSelect={
                             (kid, ktype, kslot) => onKeySelect(kid, ktype, kslot, id)

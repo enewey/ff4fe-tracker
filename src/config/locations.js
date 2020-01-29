@@ -7,9 +7,9 @@ const locations = [
   {
     id: 'intro',
     chain: [
-      { type: 'character' },
-      { type: 'character' },
-      { type: 'key' }
+      { type: 'character', note: 'Start of game' },
+      { type: 'character', note: 'Start of game' },
+      { type: 'key', note: 'Start of game.' }
     ],
     graphic: {
       uri: 'img/locations/intro.png',
@@ -21,7 +21,7 @@ const locations = [
   {
     id: 'damcyan',
     chain: [
-      { type: 'character' }
+      { type: 'character', note: 'Spoony bard cutscene' }
     ],
     graphic: {
       uri: 'img/locations/damcyan.png',
@@ -33,8 +33,8 @@ const locations = [
   {
     id: 'mysidia',
     chain: [
-      { type: 'character' },
-      { type: 'character' }
+      { type: 'character', note: 'Talk to Elder' },
+      { type: 'character', note: 'Talk to Elder' }
     ],
     graphic: {
       uri: 'img/locations/mysidia.png',
@@ -73,7 +73,8 @@ const locations = [
     chain: [
       { type: 'key', conditions: ['d-mist'] },
       { type: 'boss', conditions: ['package'] },
-      { type: 'character', conditions: ['package'] }
+      { type: 'character', conditions: ['package'],
+        note: 'Rydia\'s mom cutscene' }
     ],
     graphic: {
       uri: 'img/locations/mist-village.png',
@@ -85,7 +86,8 @@ const locations = [
   {
     id: 'kaipo',
     chain: [
-      { type: 'character', conditions: ['sandruby'] }
+      { type: 'character', conditions: ['sandruby'],
+        note: 'SandRuby Rosa cutscene' }
     ],
     graphic: {
       uri: 'img/locations/kaipo.png',
@@ -97,7 +99,7 @@ const locations = [
   {
     id: 'watery',
     chain: [
-      { type: 'character'},
+      { type: 'character', note: 'Tellah waiting for you spot' },
       { type: 'boss' }
     ],
     graphic: {
@@ -124,7 +126,7 @@ const locations = [
     chain: [
       { type: 'boss',       conditions: ['baron'] },
       { type: 'boss',       conditions: ['baron'] },
-      { type: 'character',  conditions: ['baron'] },
+      { type: 'character',  conditions: ['baron'], note: 'Defeat King cutscene' },
       { type: 'key',        conditions: ['baron'] },
       { type: 'boss',       conditions: ['baron'] }
     ],
@@ -138,10 +140,10 @@ const locations = [
   {
     id: 'baron-inn',
     chain: [
-      { type: 'boss' },
-      { type: 'boss' },
-      { type: 'character' },
-      { type: 'key' }
+      { type: 'boss', note: 'Defeat two bosses at Yang spot' },
+      { type: 'boss', note: 'Defeat two bosses at Yang spot' },
+      { type: 'character', note: 'Defeat two bosses at Yang spot' },
+      { type: 'key', note: 'Defeat two bosses at Yang spot' }
     ],
     graphic: {
       uri: 'img/locations/baron-inn.png',
@@ -167,7 +169,7 @@ const locations = [
     id: 'hobs',
     chain: [
       { type: 'boss' },
-      { type: 'character' }
+      { type: 'character', note: 'after Mombomb fight' }
     ],
     graphic: {
       uri: 'img/locations/hobs.png',
@@ -192,8 +194,10 @@ const locations = [
   {
     id: 'fabul-wife',
     chain: [
-      { type: 'key', conditions: [ [ 'magma', 'hook' ] ] },
-      { type: 'key', conditions: ['pan', [ 'magma', 'hook' ] ] }
+      { type: 'key', conditions: [ [ 'magma', 'hook' ] ],
+        note: 'Talk to Yang\'s sprite in the Sylph Cave.' },
+      { type: 'key', conditions: ['pan', [ 'magma', 'hook' ] ],
+        note: 'Whack Yang with the Pan key item, then bring it back to Yang\'s wife.' }
     ],
     graphic: {
       uri: 'img/locations/fabul-wife.png',
@@ -218,7 +222,7 @@ const locations = [
   {
     id: 'ordeals',
     chain: [
-      { type: 'character' },
+      { type: 'character', note: 'Tellah finds you spot' },
       { type: 'boss' },
       { type: 'boss' },
       { type: 'key' },
@@ -235,8 +239,10 @@ const locations = [
     id: 'zot',
     chain: [
       { type: 'boss',       conditions: ['earth'] },
-      { type: 'character',  conditions: ['earth'] },
-      { type: 'character',  conditions: ['earth'] },
+      { type: 'character',  conditions: ['earth'],
+        note: 'Save Rosa cutscene' },
+      { type: 'character',  conditions: ['earth'],
+        note: 'Save Rosa cutscene' },
       { type: 'boss',       conditions: ['earth'] },
       { type: 'key',        conditions: ['earth'] }
     ],
@@ -250,7 +256,8 @@ const locations = [
   {
     id: 'eblan',
     chain: [
-      { type: 'character',  conditions: ['hook'] },
+      { type: 'character',  conditions: ['hook'],
+        note: 'Edge/Rubi cutscene' },
       { type: 'boss',       conditions: ['hook'] },
       { type: 'boss',       conditions: ['hook'] }
     ],
@@ -268,7 +275,8 @@ const locations = [
     id: 'dwarf-castle',
     chain: [
       { type: 'boss',       conditions: [ [ 'magma', 'hook' ] ] },
-      { type: 'character',  conditions: [ [ 'magma', 'hook' ] ] },
+      { type: 'character',  conditions: [ [ 'magma', 'hook' ] ],
+        note: 'Rydia saves you spot' },
       { type: 'boss',       conditions: [ [ 'magma', 'hook' ] ] },
       { type: 'key',        conditions: [ [ 'magma', 'hook' ] ] }
     ],
@@ -341,7 +349,8 @@ const locations = [
   {
     id: 'palace',
     chain: [
-      { type: 'character', conditions: [ 'darkness' ] }
+      { type: 'character', conditions: [ 'darkness' ],
+        note: 'FuSoYo welcome!' }
     ],
     graphic: {
       uri: 'img/locations/palace.png',
